@@ -32,6 +32,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -48,6 +51,7 @@ dependencies {
 
     implementation(project(":data:network"))
     implementation(project(":domain"))
+    implementation(project(":util:core"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

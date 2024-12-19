@@ -1,4 +1,4 @@
-package com.sgupta.composite
+package com.sgupta.composite.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

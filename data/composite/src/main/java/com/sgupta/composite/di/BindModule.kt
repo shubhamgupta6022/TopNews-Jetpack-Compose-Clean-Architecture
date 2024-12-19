@@ -1,7 +1,7 @@
 package com.sgupta.composite.di
 
 import com.sgupta.composite.repoimpl.TopNewsRepoImpl
-import com.sgupta.domain.TopNewsRepo
+import com.sgupta.domain.repo.TopNewsRepo
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
