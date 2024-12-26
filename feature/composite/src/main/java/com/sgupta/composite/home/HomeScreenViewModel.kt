@@ -23,30 +23,23 @@ class HomeScreenViewModel @Inject constructor(
     private val getTopNewsUseCase: GetTopNewsUseCase
 ) : ViewModel() {
 
-//    private val _uiStates = MutableStateFlow<HomeScreenViewState>(HomeScreenViewState.Loading)
     var states by mutableStateOf<HomeScreenViewState>(HomeScreenViewState.Loading)
 
-//    init {
-//        getTopNews()
-//    }
-
     fun getTopNews() {
-        getTopNewsUseCase.execute(GetTopNewsUseCase.Param("bitcoin", 1, 1))
+        getTopNewsUseCase.execute(GetTopNewsUseCase.Param("bitcoin", 1, 5))
             .onEach {
-                when(it) {
-                    Resource.Loading -> {
+                when (it) {
+                    is Resource.Loading -> {
                         states = HomeScreenViewState.Loading
                     }
                     is Resource.Success -> {
-                        Log.d("HomeScreenViewModel", "getTopNewsUseCase = ${it.data}")
+                        Log.d("HomeScreenViewModel", "getTopNewsUseCase success = ${it.data}")
                         states = HomeScreenViewState.ApiSuccess(emptyList())
                     }
                     is Resource.Error -> {
-                        Log.d("HomeScreenViewModel", "getTopNewsUseCase = ${it.error.message}")
+                        Log.d("HomeScreenViewModel", "getTopNewsUseCase error = ${it.error.message}")
                     }
-                    is Resource.ErrorInSuccess -> {
-
-                    }
+                    else -> {}
                 }
             }
             .flowOn(Dispatchers.IO)

@@ -5,7 +5,6 @@ import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkClientBuilder {
     private val retrofitBuilder = Retrofit.Builder()
@@ -14,11 +13,8 @@ class NetworkClientBuilder {
     fun build(baseUrl: String): Retrofit {
         if (baseUrl.isEmpty()) throw Exception("Base url expected")
 
-        val okHttpClient: OkHttpClient = provideOkHttpClient()
         return retrofitBuilder
             .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
@@ -46,10 +42,5 @@ class NetworkClientBuilder {
         okHttpClientBuilder.addInterceptor(interceptor)
         return this
     }
-
-    /**
-     * Creates okhttp client to be used by retrofit
-     */
-    private fun provideOkHttpClient(): OkHttpClient = okHttpClientBuilder.build()
 
 }

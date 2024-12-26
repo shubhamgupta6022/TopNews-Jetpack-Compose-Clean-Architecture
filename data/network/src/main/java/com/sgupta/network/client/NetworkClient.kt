@@ -29,7 +29,6 @@ constructor(
     ): T {
         val networkConfig = networkConfigMapper.convert(host)
         val url = networkConfig.url
-        val interceptor = networkConfig.interceptor
         if (url.isEmpty()) {
             throw IllegalStateException("Url can't be empty")
         }
@@ -37,9 +36,6 @@ constructor(
             NetworkClientBuilder().apply {
                 addConverterFactory(GsonConverterFactory.create(gson ?: Gson()))
             }
-        interceptor?.let {
-            networkClientBuilder.addInterceptor(it)
-        }
 
         return networkClientBuilder.build(url).create(service)
     }

@@ -16,9 +16,8 @@ internal class NetworkModule {
     @Provides
     @Singleton
     fun providesNewsApiService(
-        networkClient: NetworkClient
+        networkClient: NetworkClient,
     ): NewsApiService {
         return networkClient.getService(NetworkHost.SERVER_BASE, NewsApiService::class.java)
     }
-
 }

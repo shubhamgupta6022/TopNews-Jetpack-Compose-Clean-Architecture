@@ -6,25 +6,25 @@ import com.sgupta.domain.model.NewsDataModel
 import com.sgupta.domain.model.SourceDataModel
 
 data class NewsResponseModel(
-    @SerializedName("articles") val articles: List<ArticleResponseModel>,
     @SerializedName("status") val status: String,
-    @SerializedName("totalResults") val totalResults: Int
+    @SerializedName("totalResults") val totalResults: Int,
+    @SerializedName("articles") val articles: List<ArticleResponseModel>,
 )
 
 data class ArticleResponseModel(
-    @SerializedName("author") val author: String,
-    @SerializedName("content") val content: String,
-    @SerializedName("description") val description: String,
-    @SerializedName("publishedAt") val publishedAt: String,
     @SerializedName("source") val source: SourceResponseModel,
-    @SerializedName("title") val title: String,
-    @SerializedName("url") val url: String,
-    @SerializedName("urlToImage") val urlToImage: String
+    @SerializedName("author") val author: String? = null,
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("description") val description: String? = null,
+    @SerializedName("url") val url: String? = null,
+    @SerializedName("urlToImage") val urlToImage: String? = null,
+    @SerializedName("publishedAt") val publishedAt: String? = null,
+    @SerializedName("content") val content: String? = null,
 )
 
 data class SourceResponseModel(
-    @SerializedName("id") val id: String,
-    @SerializedName("name") val name: String
+    @SerializedName("id") val id: String? = null,
+    @SerializedName("name") val name: String? = null
 )
 
 fun NewsResponseModel.toNewsDataModel() = NewsDataModel(
@@ -34,9 +34,17 @@ fun NewsResponseModel.toNewsDataModel() = NewsDataModel(
 )
 
 fun ArticleResponseModel.toArticleDataModel() = ArticleDataModel(
-    author, content, description, publishedAt, source.toSourceDataModel(), title, url, urlToImage
+    author = author,
+    content = content,
+    description = description,
+    publishedAt = publishedAt,
+    source = source.toSourceDataModel(),
+    title = title,
+    url = url,
+    urlToImage = urlToImage
 )
 
 fun SourceResponseModel.toSourceDataModel() = SourceDataModel(
-    id, name
+    id = id,
+    name = name
 )

@@ -35,8 +35,6 @@ import com.sgupta.core.theme.Typography
 
 @Composable
 fun NewsHomeScreen(state: HomeScreenViewState, onEvent: (ViewEvent) -> Unit) {
-//    HomeScreenViewState.Loading
-//    HomeScreenViewState.ApiSuccess()
     NewsAppTheme {
         LazyColumn(
             modifier = Modifier
