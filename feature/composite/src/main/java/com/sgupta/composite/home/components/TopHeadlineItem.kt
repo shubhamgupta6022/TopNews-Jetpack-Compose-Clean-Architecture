@@ -23,41 +23,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.sgupta.core.theme.DarkGray
-import com.sgupta.core.theme.NeutralBlack
 import com.sgupta.core.theme.Typography
+import com.sgupta.core.theme.colorGrey500
+import com.sgupta.core.theme.colorGrey700
+import com.sgupta.domain.model.ArticleDataModel
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun TopHeadLineSection() {
-    Column {
-        Text(
-            text = "Top Headlines",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 8.dp),
-            textAlign = TextAlign.Start,
-            style = Typography.headlineMedium
-        )
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            items(10) {
-                TopHeadLineItem()
-            }
+fun TopHeadLineSection(topNewsList: List<ArticleDataModel>) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        items(topNewsList.size) {
+            TopHeadLineItem(topNewsList[it])
         }
     }
 }
 
 @Composable
-fun TopHeadLineItem() {
+fun TopHeadLineItem(articleDataModel: ArticleDataModel) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val cardSize = screenWidth * 0.40f
@@ -75,10 +64,10 @@ fun TopHeadLineItem() {
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = "https://images.unsplash.com/photo-1504674900247-0877df9cc836", // Sample URL
+                    model = articleDataModel.urlToImage, // Sample URL
                     contentScale = ContentScale.Crop // Crop the image
                 ),
-                contentDescription = "Top headline image",
+                contentDescription = articleDataModel.description,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f),
@@ -86,7 +75,7 @@ fun TopHeadLineItem() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Climate Crisis",
+                text = articleDataModel.title.orEmpty(),
                 textAlign = TextAlign.Start,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -94,11 +83,11 @@ fun TopHeadLineItem() {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp),
                 style = Typography.headlineMedium.copy(fontSize = 18.sp),
-                color = NeutralBlack
+                color = colorGrey700
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Urgent actions needed to combat climate change.",
+                text = articleDataModel.description.orEmpty(),
                 textAlign = TextAlign.Start,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -106,7 +95,7 @@ fun TopHeadLineItem() {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp),
                 style = Typography.labelSmall.copy(fontSize = 14.sp),
-                color = DarkGray
+                color = colorGrey500
             )
         }
     }

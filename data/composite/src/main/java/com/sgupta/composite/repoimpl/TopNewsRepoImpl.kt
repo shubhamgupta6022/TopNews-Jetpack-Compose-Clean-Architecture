@@ -19,7 +19,7 @@ class TopNewsRepoImpl @Inject constructor(
     override fun getTopNews(param: NewsRequestParam): Flow<Resource<NewsDataModel>> {
         return toResponseFlow(
             apiCall = {
-                newsApiService.getTopHeadlines(param.q, param.page, param.pageSize, apiKey)
+                newsApiService.getTopHeadlines(param.sources, param.page, param.pageSize, apiKey)
             }, mapper = {
                 it?.toNewsDataModel()
             }

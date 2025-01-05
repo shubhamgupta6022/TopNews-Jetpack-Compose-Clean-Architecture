@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -29,9 +28,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.sgupta.core.components.ToolbarComposable
-import com.sgupta.core.theme.DarkGray
-import com.sgupta.core.theme.NeutralBlack
 import com.sgupta.core.theme.Typography
+import com.sgupta.core.theme.colorGrey700
 
 @Composable
 fun NewsList(navController: NavHostController) {
@@ -115,7 +113,7 @@ fun NewsListItem() {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp),
                 style = Typography.headlineMedium.copy(fontSize = 18.sp),
-                color = NeutralBlack
+                color = colorGrey700
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -127,7 +125,7 @@ fun NewsListItem() {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp),
                 style = Typography.labelSmall.copy(fontSize = 14.sp),
-                color = DarkGray
+                color = colorGrey700
             )
         }
     }

@@ -26,19 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.sgupta.core.theme.Typography
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun NewsListSection() {
-    LazyColumn {
-        items(3) {
-            NewsListItem()
-        }
-    }
-}
+import com.sgupta.domain.model.ArticleDataModel
 
 @Composable
-fun NewsListItem() {
+fun NewsListItem(articleDataModel: ArticleDataModel) {
     Card(
         shape = RoundedCornerShape(4.dp),
         modifier = Modifier
@@ -53,7 +44,7 @@ fun NewsListItem() {
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = "https://images.unsplash.com/photo-1504674900247-0877df9cc836", // Sample URL
+                    model = articleDataModel.urlToImage, // Sample URL
                     contentScale = ContentScale.Crop // Crop the image
                 ),
                 contentDescription = "News Image",
@@ -67,7 +58,7 @@ fun NewsListItem() {
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "Breaking News",
+                    text = articleDataModel.title.orEmpty(),
                     style = Typography.titleMedium.copy(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
@@ -76,7 +67,7 @@ fun NewsListItem() {
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Major events happening now.",
+                    text = articleDataModel.description.orEmpty(),
                     style = Typography.bodyMedium.copy(
                         fontSize = 14.sp,
                     ),

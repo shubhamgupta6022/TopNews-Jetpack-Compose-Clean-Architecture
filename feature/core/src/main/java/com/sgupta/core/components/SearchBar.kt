@@ -24,7 +24,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sgupta.core.theme.LightColors
+import com.sgupta.core.theme.colorGreyLight
 
 @Composable
 fun SearchBar(modifier: Modifier) {
@@ -34,7 +34,7 @@ fun SearchBar(modifier: Modifier) {
         modifier = modifier
             .height(48.dp)
             .background(
-                color = LightColors.background, // Make sure LightColors.background is defined
+                color = colorGreyLight, // Make sure LightColors.background is defined
                 shape = RoundedCornerShape(4.dp)
             ),
         contentAlignment = Alignment.CenterStart
@@ -55,7 +55,7 @@ fun SearchBar(modifier: Modifier) {
                 onValueChange = { query = it },
                 singleLine = true,
                 textStyle = TextStyle(
-                    color = Color.Black,
+                    color = colorGreyLight,
                     fontSize = 16.sp
                 ),
                 modifier = Modifier

@@ -17,18 +17,24 @@ import com.sgupta.composite.home.components.CategoriesSectionItem
 import com.sgupta.composite.home.components.CountriesSectionItem
 import com.sgupta.composite.home.components.NewsHeader
 import com.sgupta.composite.home.components.NewsListItem
-import com.sgupta.composite.home.components.SectionHeader
 import com.sgupta.composite.home.components.TopHeadLineSection
 import com.sgupta.composite.home.states.HomeScreenViewState
 import com.sgupta.core.ViewEvent
+import com.sgupta.core.components.LoadingIndicator
 import com.sgupta.core.components.SearchBar
+import com.sgupta.core.components.SectionHeadline
 import com.sgupta.core.theme.LightColors
 import com.sgupta.core.theme.NewsAppTheme
 
 @Composable
 fun NewsHomeScreen(state: HomeScreenViewState, onEvent: (ViewEvent) -> Unit) {
-    val lightColors = remember { LightColors }
-    val handleEvent = remember(onEvent) { { event: ViewEvent -> onEvent(event) } }
+    val lightColors = LightColors
+
+    val newsUiModel = state.newsUiModel
+    val topNewsList = remember(newsUiModel) { newsUiModel?.topNewsItemsList ?: emptyList() }
+    val articleList = remember(newsUiModel) { newsUiModel?.articlesItemsList ?: emptyList() }
+    val categoriesList = remember(newsUiModel) { newsUiModel?.categoriesItemsList ?: emptyList() }
+    val countriesList = remember(newsUiModel) { newsUiModel?.countriesItemsList ?: emptyList() }
 
     NewsAppTheme {
         Column(
@@ -38,40 +44,42 @@ fun NewsHomeScreen(state: HomeScreenViewState, onEvent: (ViewEvent) -> Unit) {
         ) {
             NewsHeader()
 
+            if (state.loading) {
+                LoadingIndicator()
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item {
-                    SearchBar(modifier = Modifier.padding(horizontal = 16.dp))
+                if (topNewsList.isNotEmpty()) {
+                    item { SearchBar(modifier = Modifier.padding(horizontal = 16.dp)) }
+                    item { SectionHeadline(Modifier, "Top Headlines") }
+                    item { TopHeadLineSection(topNewsList) }
                 }
 
-                item {
-                    TopHeadLineSection()
+                items(articleList.size) { index ->
+                    NewsListItem(articleList[index])
                 }
 
-                items(3) { _ ->
-                    NewsListItem()
+                if (categoriesList.isNotEmpty()) {
+                    item { SectionHeadline(Modifier, "Categories") }
+                    items(categoriesList.size) { category ->
+                        CategoriesSectionItem(categoriesList[category])
+                    }
                 }
 
-                item {
-                    SectionHeader(title = "Categories", modifier = Modifier.padding(start = 16.dp))
-                }
-                items(3) { category ->
-                    CategoriesSectionItem()
-                }
-
-                item {
-                    SectionHeader(title = "Countries News", modifier = Modifier.padding(start = 16.dp))
-                }
-                items(3) { country ->
-                    CountriesSectionItem() { handleEvent(it) }
+                if (countriesList.isNotEmpty()) {
+                    item { SectionHeadline(Modifier, "Countries News") }
+                    items(countriesList.size) { country ->
+                        CountriesSectionItem(countriesList[country]) {
+                            onEvent(it)
+                        }
+                    }
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
     }

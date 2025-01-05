@@ -17,7 +17,7 @@ class GetTopNewsUseCase @Inject constructor(
     private val newsRepo: TopNewsRepo
 ) : QueryUseCase<GetTopNewsUseCase.Param, Resource<NewsDataModel?>>() {
     override fun start(param: Param): Flow<Resource<NewsDataModel?>> = flow {
-        val param = NewsRequestParam(param.q, param.page, param.pageSize)
+        val param = NewsRequestParam(param.sources, param.page, param.pageSize)
         newsRepo.getTopNews(param)
             .onLoading {
                 emit(Resource.Loading)
@@ -31,5 +31,5 @@ class GetTopNewsUseCase @Inject constructor(
             .collect()
     }
 
-    data class Param(val q: String, val page: Int, val pageSize: Int)
+    data class Param(val sources: String, val page: Int, val pageSize: Int)
 }
