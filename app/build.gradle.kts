@@ -70,9 +70,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
+
     implementation(project(":feature:composite"))
     implementation(project(":domain"))
     implementation(project(":data:composite"))
+    implementation(project(":navigation"))
 
     // dagger hilt dependency
     implementation(libs.hilt.android)

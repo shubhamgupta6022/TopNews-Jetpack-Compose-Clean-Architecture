@@ -2,6 +2,7 @@ package com.sgupta.composite.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.sgupta.composite.home.events.HomeScreenEvents
+import com.sgupta.core.ViewEvent
 import com.sgupta.core.theme.DarkGray
 import com.sgupta.core.theme.LightGray
 import com.sgupta.core.theme.NeutralBlack
@@ -39,22 +42,27 @@ import com.sgupta.core.theme.Typography
 private fun CountriesSection() {
     LazyColumn {
         items(3) {
-            CountriesSectionItem()
+            CountriesSectionItem {
+
+            }
         }
     }
 }
 
 @Composable
-fun CountriesSectionItem() {
+fun CountriesSectionItem(onEvent: (ViewEvent) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(Color.White)
+            .clickable {
+                onEvent(HomeScreenEvents.CountriesViewAllClicked(1))
+            }
     ) {
         Column {
             CountriesItem(
-                title = "Sports"
+                title = "India"
             )
             Divider(
                 modifier = Modifier.padding(top = 4.dp),

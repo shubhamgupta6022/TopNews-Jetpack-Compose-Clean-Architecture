@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sgupta.composite"
+    namespace = "com.sgupta.navigation"
     compileSdk = 34
 
     defaultConfig {
@@ -29,14 +29,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     buildFeatures {
         compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
     kapt {
         correctErrorTypes = true
@@ -46,35 +51,25 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose)
-
-    implementation(project(":feature:core"))
-    implementation(project(":domain"))
-    implementation(project(":util:core"))
-
-    // dagger hilt dependency
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.lifecycle.viewmodel.android)
-    kapt(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx.v287)
-    implementation(libs.kotlinx.coroutines.android)
-
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-
-    implementation(libs.coil.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    debugImplementation(libs.ui.tooling)
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(project(":feature:composite"))
+    implementation(project(":feature:core"))
+
+    // dagger hilt dependency
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.androidx.lifecycle.viewmodel.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v287)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.hilt.navigation.fragment)
 }

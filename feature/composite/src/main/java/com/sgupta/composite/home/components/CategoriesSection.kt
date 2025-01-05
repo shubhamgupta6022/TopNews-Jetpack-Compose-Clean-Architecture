@@ -54,7 +54,7 @@ fun CategoriesSectionItem() {
         Column {
             CategoryItem(
                 icon = Icons.Default.Search,
-                title = "India"
+                title = "Sports"
             )
             Divider(
                 modifier = Modifier.padding(top = 4.dp),
