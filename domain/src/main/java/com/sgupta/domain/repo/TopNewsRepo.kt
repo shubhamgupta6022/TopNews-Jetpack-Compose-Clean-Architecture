@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface TopNewsRepo {
     fun getTopNews(param: NewsRequestParam): Flow<Resource<NewsDataModel>>
+    fun getCountryNews(param: NewsRequestParam): Flow<Resource<NewsDataModel>>
+    fun getCategoryNews(param: NewsRequestParam): Flow<Resource<NewsDataModel>>
 }

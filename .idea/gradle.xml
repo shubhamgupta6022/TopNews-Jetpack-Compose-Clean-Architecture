@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/composite" />
             <option value="$PROJECT_DIR$/feature/core" />
+            <option value="$PROJECT_DIR$/navigation" />
             <option value="$PROJECT_DIR$/util" />
             <option value="$PROJECT_DIR$/util/core" />
           </set>

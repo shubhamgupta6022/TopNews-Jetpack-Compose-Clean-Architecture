@@ -25,4 +25,24 @@ class TopNewsRepoImpl @Inject constructor(
             }
         )
     }
+
+    override fun getCountryNews(param: NewsRequestParam): Flow<Resource<NewsDataModel>> {
+        return toResponseFlow(
+            apiCall = {
+                newsApiService.getCountryNews(param.sources, param.page, param.pageSize, apiKey)
+            }, mapper = {
+                it?.toNewsDataModel()
+            }
+        )
+    }
+
+    override fun getCategoryNews(param: NewsRequestParam): Flow<Resource<NewsDataModel>> {
+        return toResponseFlow(
+            apiCall = {
+                newsApiService.getCategoryNews(param.sources, param.page, param.pageSize, apiKey)
+            }, mapper = {
+                it?.toNewsDataModel()
+            }
+        )
+    }
 }

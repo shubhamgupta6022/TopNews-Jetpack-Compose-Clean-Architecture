@@ -2,7 +2,6 @@ package com.sgupta.composite.home.model
 
 import com.sgupta.composite.R
 import com.sgupta.domain.model.ArticleDataModel
-import com.sgupta.domain.model.NewsDataModel
 
 data class HomeNewsUiModel(
     val topNewsItemsList: List<ArticleDataModel> = emptyList(),

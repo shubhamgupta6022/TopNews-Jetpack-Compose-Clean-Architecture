@@ -6,7 +6,7 @@ data class CategoriesUiModel(
     val icon: Int
 )
 
-enum class CategoryType {
-    Sports,
-    Business
+enum class CategoryType(val id: String) {
+    Sports("sports"),
+    Business("business")
 }

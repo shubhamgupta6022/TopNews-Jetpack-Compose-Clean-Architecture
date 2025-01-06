@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,7 +64,7 @@ fun CountriesSectionItem(countriesUiModel: CountriesUiModel, onEvent: (ViewEvent
             ) {
                 onEvent(it)
             }
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.padding(top = 4.dp),
                 color = colorGreyLight,
                 thickness = 1.dp

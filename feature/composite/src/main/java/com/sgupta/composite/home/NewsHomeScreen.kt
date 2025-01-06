@@ -31,10 +31,10 @@ fun NewsHomeScreen(state: HomeScreenViewState, onEvent: (ViewEvent) -> Unit) {
     val lightColors = LightColors
 
     val newsUiModel = state.newsUiModel
-    val topNewsList = remember(newsUiModel) { newsUiModel?.topNewsItemsList ?: emptyList() }
-    val articleList = remember(newsUiModel) { newsUiModel?.articlesItemsList ?: emptyList() }
-    val categoriesList = remember(newsUiModel) { newsUiModel?.categoriesItemsList ?: emptyList() }
-    val countriesList = remember(newsUiModel) { newsUiModel?.countriesItemsList ?: emptyList() }
+    val topNewsList = remember(newsUiModel) { newsUiModel?.topNewsItemsList.orEmpty() }
+    val articleList = remember(newsUiModel) { newsUiModel?.articlesItemsList.orEmpty() }
+    val categoriesList = remember(newsUiModel) { newsUiModel?.categoriesItemsList.orEmpty() }
+    val countriesList = remember(newsUiModel) { newsUiModel?.countriesItemsList.orEmpty() }
 
     NewsAppTheme {
         Column(
@@ -66,7 +66,9 @@ fun NewsHomeScreen(state: HomeScreenViewState, onEvent: (ViewEvent) -> Unit) {
                 if (categoriesList.isNotEmpty()) {
                     item { SectionHeadline(Modifier, "Categories") }
                     items(categoriesList.size) { category ->
-                        CategoriesSectionItem(categoriesList[category])
+                        CategoriesSectionItem(categoriesList[category]) {
+                            onEvent(it)
+                        }
                     }
                 }
 

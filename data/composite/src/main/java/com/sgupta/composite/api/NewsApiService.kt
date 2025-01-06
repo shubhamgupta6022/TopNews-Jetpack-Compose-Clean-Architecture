@@ -14,4 +14,20 @@ interface NewsApiService {
         @Query("pageSize") pageSize: Int,
         @Query("apiKey") apiKey: String
     ): Response<NewsResponseModel>
+
+    @GET("top-headlines")
+    suspend fun getCountryNews(
+        @Query("country") country: String,
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int,
+        @Query("apiKey") apiKey: String
+    ): Response<NewsResponseModel>
+
+    @GET("top-headlines")
+    suspend fun getCategoryNews(
+        @Query("category") category: String,
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int,
+        @Query("apiKey") apiKey: String
+    ): Response<NewsResponseModel>
 }
