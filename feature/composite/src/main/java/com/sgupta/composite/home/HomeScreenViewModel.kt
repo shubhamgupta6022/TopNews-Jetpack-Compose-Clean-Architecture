@@ -5,13 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sgupta.composite.R
-import com.sgupta.composite.home.model.CategoriesUiModel
-import com.sgupta.composite.home.model.CategoryType
-import com.sgupta.composite.home.model.CountriesUiModel
 import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
 import com.sgupta.core.network.Resource
+import com.sgupta.domain.model.ArticleDataModel
 import com.sgupta.domain.usecase.GetTopNewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +27,10 @@ class HomeScreenViewModel @Inject constructor(
     var states by mutableStateOf(HomeScreenViewState())
     private var topHeadlinesJob: Job? = null
     private var otherTopHeadlinesJob: Job? = null
-    private var newsUiModel: HomeNewsUiModel = HomeNewsUiModel()
+    private var newsUiModel: HomeNewsUiModel? = null
+    private var topNewsItemsList: List<ArticleDataModel>? = null
+    private var articlesItemsList: List<ArticleDataModel>? = null
+
     init {
         getTopNews()
     }
@@ -44,32 +44,40 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             topHeadlinesJob?.join()
             otherTopHeadlinesJob?.join()
+            newsUiModel = HomeNewsUiModel().copy(
+                topNewsItemsList = topNewsItemsList.orEmpty(),
+                articlesItemsList = articlesItemsList.orEmpty()
+            )
             states = states.copy(loading = false, newsUiModel = newsUiModel)
         }
     }
 
-    private fun topHeadLinesJob() = getTopNewsUseCase.execute(GetTopNewsUseCase.Param("bbc-news", 1, 5))
-        .onEach {
-            when (it) {
-                is Resource.Success -> {
-                    newsUiModel = newsUiModel.copy(topNewsItemsList = it.data?.articles.orEmpty())
-                }
-                else -> {}
-            }
-        }
-        .flowOn(Dispatchers.IO)
-        .launchIn(viewModelScope)
+    private fun topHeadLinesJob() =
+        getTopNewsUseCase.execute(GetTopNewsUseCase.Param("bbc-news", 1, 5))
+            .onEach {
+                when (it) {
+                    is Resource.Success -> {
+                        topNewsItemsList = it.data?.articles.orEmpty()
+                    }
 
-    private fun otherTopHeadLines() = getTopNewsUseCase.execute(GetTopNewsUseCase.Param("bbc-news", 2, 3))
-        .onEach {
-            when (it) {
-                is Resource.Success -> {
-                    newsUiModel = newsUiModel.copy(articlesItemsList = it.data?.articles.orEmpty())
+                    else -> {}
                 }
-                else -> {}
             }
-        }
-        .flowOn(Dispatchers.IO)
-        .launchIn(viewModelScope)
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
+
+    private fun otherTopHeadLines() =
+        getTopNewsUseCase.execute(GetTopNewsUseCase.Param("bbc-news", 2, 3))
+            .onEach {
+                when (it) {
+                    is Resource.Success -> {
+                        articlesItemsList = it.data?.articles.orEmpty()
+                    }
+
+                    else -> {}
+                }
+            }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
 
 }

@@ -34,13 +34,11 @@ import com.sgupta.domain.model.ArticleDataModel
 
 @Composable
 fun TopHeadLineSection(topNewsList: List<ArticleDataModel>) {
-    val arrangement = remember { Arrangement.spacedBy(12.dp) }
-    val padding = remember { PaddingValues(16.dp) }
     LazyRow(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalArrangement = arrangement,
-        contentPadding = padding
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(16.dp)
     ) {
         items(topNewsList.size) {
             TopHeadLineItem(topNewsList[it])

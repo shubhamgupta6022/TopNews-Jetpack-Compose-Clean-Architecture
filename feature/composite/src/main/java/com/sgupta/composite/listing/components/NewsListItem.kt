@@ -1,6 +1,5 @@
 package com.sgupta.composite.listing.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,20 +11,30 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.sgupta.core.theme.Typography
 import com.sgupta.core.theme.colorGrey700
 import com.sgupta.domain.model.ArticleDataModel
 
 @Composable
 fun NewsListItem(articleDataModel: ArticleDataModel) {
+    val context = LocalContext.current
+    val imageRequest = remember(articleDataModel.urlToImage) {
+        ImageRequest.Builder(context)
+            .data(articleDataModel.urlToImage)
+            .crossfade(true)
+            .build()
+    }
     Card(
         modifier = Modifier
             .padding(16.dp),
@@ -42,12 +51,9 @@ fun NewsListItem(articleDataModel: ArticleDataModel) {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(
-                    model = articleDataModel.urlToImage, // Sample URL
-                    contentScale = ContentScale.Crop // Crop the image
-                ),
-                contentDescription = "Top headline image",
+            AsyncImage(
+                model = imageRequest,
+                contentDescription = "News Image",
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f),

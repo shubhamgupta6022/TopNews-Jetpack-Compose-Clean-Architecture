@@ -47,7 +47,7 @@ class NewsListViewModel @AssistedInject constructor(
     }
 
     private fun getCountryList() {
-        getCountryNewsUseCase.execute(GetCountryNewsUseCase.Param("us", 1, 5))
+        getCountryNewsUseCase.execute(GetCountryNewsUseCase.Param("us", 1, 20))
             .onEach {
                 when (it) {
                     is Resource.Loading -> {
@@ -70,7 +70,7 @@ class NewsListViewModel @AssistedInject constructor(
     }
 
     private fun getCategoryList() {
-        getCategoryNewsUseCase.execute(GetCategoryNewsUseCase.Param(category.orEmpty(), 1, 5))
+        getCategoryNewsUseCase.execute(GetCategoryNewsUseCase.Param(category.orEmpty(), 1, 20))
             .onEach {
                 when (it) {
                     is Resource.Success -> {
