@@ -11,9 +11,6 @@
       <SelectionState runConfigName="data">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="GreetingPreview">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="NewsHomeScreen">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

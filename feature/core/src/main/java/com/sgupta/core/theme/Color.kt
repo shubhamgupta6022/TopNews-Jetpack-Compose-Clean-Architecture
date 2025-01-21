@@ -39,6 +39,7 @@ val colorBgDeepGreen100 = Color(0xFFF4F6F7)
 val colorBgBrown300 = Color(0xFFFFEFE1)
 val colorBgBrown200 = Color(0xFFFFF5EC)
 val colorBgBrown100 = Color(0xFFFEFAF6)
+val colorBgBlue = Color(0xFF0A1A2F)
 
 // Gradient colors
 val colorGradientBlackStart = Color(0xFF424242)

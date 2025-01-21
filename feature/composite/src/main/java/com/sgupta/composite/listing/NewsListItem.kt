@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.sgupta.composite.home.components.ArticleListItem
 import com.sgupta.composite.listing.components.NewsListItem
+import com.sgupta.composite.listing.states.NewsListViewState
 import com.sgupta.core.components.LoadingIndicator
 import com.sgupta.core.components.SearchBar
 import com.sgupta.core.components.SectionHeadline

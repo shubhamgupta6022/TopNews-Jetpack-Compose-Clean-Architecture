@@ -1,6 +1,7 @@
 package com.sgupta.navigation
 
 enum class Screens(val id: String) {
+    Splash("splash"),
     Home("home"),
     Listing("listing");
 

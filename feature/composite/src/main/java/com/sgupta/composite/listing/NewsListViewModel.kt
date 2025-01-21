@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sgupta.composite.listing.states.NewsListViewState
 import com.sgupta.core.network.Resource
 import com.sgupta.domain.usecase.GetCategoryNewsUseCase
 import com.sgupta.domain.usecase.GetCountryNewsUseCase

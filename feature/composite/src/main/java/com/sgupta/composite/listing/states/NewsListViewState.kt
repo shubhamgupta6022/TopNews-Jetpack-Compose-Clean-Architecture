@@ -1,4 +1,4 @@
-package com.sgupta.composite.listing
+package com.sgupta.composite.listing.states
 
 import com.sgupta.domain.model.ArticleDataModel
 

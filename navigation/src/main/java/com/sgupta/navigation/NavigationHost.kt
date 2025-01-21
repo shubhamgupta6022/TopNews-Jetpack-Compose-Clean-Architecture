@@ -12,11 +12,19 @@ import com.sgupta.composite.home.NewsHomeScreen
 import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.listing.NewsList
 import com.sgupta.composite.listing.NewsListViewModel
+import com.sgupta.composite.splash.SplashScreen
 
 @Composable
 fun NavigationHost() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screens.Home.id) {
+    NavHost(navController = navController, startDestination = Screens.Splash.id) {
+        composable(Screens.Splash.id) {
+            SplashScreen {
+                navController.navigate(Screens.Home.id) {
+                    popUpTo(Screens.Splash.id) { inclusive = true } // Remove Splash from backstack
+                }
+            }
+        }
         composable(Screens.Home.id) {
             val viewModel = hiltViewModel<HomeScreenViewModel>()
             NewsHomeScreen(
