@@ -1,23 +1,18 @@
 package com.sgupta.composite.listing
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sgupta.composite.listing.states.NewsListViewState
-import com.sgupta.core.network.Resource
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.sgupta.domain.model.NewsDataModel
 import com.sgupta.domain.usecase.GetCategoryNewsUseCase
 import com.sgupta.domain.usecase.GetCountryNewsUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.Flow
 
 @HiltViewModel(assistedFactory = NewsListViewModel.NewsListViewModelFactory::class)
 class NewsListViewModel @AssistedInject constructor(
@@ -35,7 +30,7 @@ class NewsListViewModel @AssistedInject constructor(
         ): NewsListViewModel
     }
 
-    var states by mutableStateOf(NewsListViewState())
+    private val pageSize = 5
 
     init {
         Log.d("NewsListViewModel", "country = $country $category")
@@ -47,41 +42,17 @@ class NewsListViewModel @AssistedInject constructor(
         }
     }
 
+    var categoryState: Flow<PagingData<NewsDataModel>>? = null
+    var countryStates: Flow<PagingData<NewsDataModel>>? = null
+
     private fun getCountryList() {
-        getCountryNewsUseCase.execute(GetCountryNewsUseCase.Param("us", 1, 20))
-            .onEach {
-                when (it) {
-                    is Resource.Loading -> {
-                        Log.d("NewsListViewModel", "loading")
-                        states = states.copy(loading = true)
-                    }
-                    is Resource.Success -> {
-                        Log.d("NewsListViewModel", "success")
-                        states = states.copy(newsUiModel = it.data?.articles.orEmpty(), loading = false)
-                    }
-                    is Resource.Error -> {
-                        Log.d("NewsListViewModel", "error")
-                        states = states.copy(loading = false, error = it.error)
-                    }
-                    else -> {}
-                }
-            }
-            .flowOn(Dispatchers.Main)
-            .launchIn(viewModelScope)
+        countryStates = getCountryNewsUseCase.execute(GetCountryNewsUseCase.Param(country.orEmpty(), 1, pageSize))
+            .cachedIn(viewModelScope)
     }
 
     private fun getCategoryList() {
-        getCategoryNewsUseCase.execute(GetCategoryNewsUseCase.Param(category.orEmpty(), 1, 20))
-            .onEach {
-                when (it) {
-                    is Resource.Success -> {
-                        states = states.copy(newsUiModel = it.data?.articles.orEmpty(), loading = false)
-                    }
-                    else -> {}
-                }
-            }
-            .flowOn(Dispatchers.IO)
-            .launchIn(viewModelScope)
+        categoryState = getCategoryNewsUseCase.execute(GetCategoryNewsUseCase.Param(category.orEmpty(), 1, pageSize))
+            .cachedIn(viewModelScope)
     }
 
 }

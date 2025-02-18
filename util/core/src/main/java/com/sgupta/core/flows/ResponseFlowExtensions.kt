@@ -23,6 +23,22 @@ fun <T, R> toResponseFlow(
     }
 }
 
+suspend fun <T, R> toPageSource(
+    apiCall: suspend () -> Response<T>,
+    mapper: (T?) -> R?
+) : Resource<R>{
+    return try {
+        val response = apiCall()
+        if (response.isSuccessful) {
+            Resource.Success(mapper(response.body()))
+        } else {
+            Resource.Error(Throwable(response.errorBody()?.string() ?: "Unknown Error"))
+        }
+    } catch (e: Exception) {
+        Resource.Error(e)
+    }
+}
+
 inline fun <T> Flow<Resource<T>>.onLoading(crossinline action: suspend () -> Unit) = this
     .onEach { if (it is Resource.Loading) action.invoke() }
 

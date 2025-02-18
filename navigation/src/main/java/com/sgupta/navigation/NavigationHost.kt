@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sgupta.composite.home.HomeScreenViewModel
 import com.sgupta.composite.home.NewsHomeScreen
 import com.sgupta.composite.home.events.HomeScreenEvents
@@ -73,8 +74,12 @@ fun NavigationHost() {
                 hiltViewModel<NewsListViewModel, NewsListViewModel.NewsListViewModelFactory> { factory ->
                     factory.create(country, category)
                 }
-            val states = viewModel.states
-            NewsList(states, navController, title)
+            val newsPagingItems = if (country?.isNotEmpty() == true) {
+                viewModel.countryStates?.collectAsLazyPagingItems()
+            } else {
+                viewModel.categoryState?.collectAsLazyPagingItems()
+            }
+            NewsList(navController, title, newsPagingItems)
         }
     }
 }
