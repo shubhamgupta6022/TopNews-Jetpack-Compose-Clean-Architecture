@@ -15,7 +15,7 @@ class InterceptorMapperImpl @Inject constructor(
     override fun convert(from: NetworkHost): Interceptor {
         val headers = networkHeaderManager.convert(from)
         return when (from) {
-            NetworkHost.SERVER_BASE -> {
+            NetworkHost.SERVER_BASE, NetworkHost.SERVER_GEMINI -> {
                 ApiHeaderInterceptor(headers)
             }
         }

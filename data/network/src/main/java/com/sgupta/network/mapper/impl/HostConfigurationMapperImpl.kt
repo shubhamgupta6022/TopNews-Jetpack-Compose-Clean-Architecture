@@ -10,6 +10,7 @@ class HostConfigurationMapperImpl @Inject constructor(): HostConfigurationMapper
     override fun convert(from: NetworkHost): String {
         return when(from) {
             NetworkHost.SERVER_BASE -> "https://newsapi.org/v2/"
+            NetworkHost.SERVER_GEMINI -> "https://generativelanguage.googleapis.com/v1beta/models"
         }
     }
 }

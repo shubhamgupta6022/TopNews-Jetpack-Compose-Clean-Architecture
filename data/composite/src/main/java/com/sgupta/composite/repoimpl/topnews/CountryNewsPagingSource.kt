@@ -1,4 +1,4 @@
-package com.sgupta.composite.repoimpl
+package com.sgupta.composite.repoimpl.topnews
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -11,20 +11,20 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-class CategoryNewsPagingSource @AssistedInject constructor(
+class CountryNewsPagingSource @AssistedInject constructor(
     private val newsApiService: NewsApiService,
-    @Assisted private val category: String,
+    @Assisted private val country: String,
     @Assisted("pageSize") private val pageSize: Int,
     @Assisted("apiKey") private val apiKey: String,
 ) : PagingSource<Int, NewsDataModel>() {
 
     @AssistedFactory
-    interface CategoryNewsPagingSourceFactory {
-        fun createCategoryNewsPagingSource(
-            category: String,
+    interface CountryNewsPagingSourceFactory {
+        fun createCountryNewsPagingSource(
+            country: String,
             @Assisted("pageSize") pageSize: Int,
             @Assisted("apiKey") apiKey: String
-        ): CategoryNewsPagingSource
+        ): CountryNewsPagingSource
     }
 
     override fun getRefreshKey(state: PagingState<Int, NewsDataModel>): Int? {
@@ -38,7 +38,7 @@ class CategoryNewsPagingSource @AssistedInject constructor(
         val page = params.key ?: 1
         val result = toPageSource(
             apiCall = {
-                newsApiService.getCategoryNews(category, page, pageSize, apiKey)
+                newsApiService.getCountryNews(country, page, pageSize, apiKey)
             }, mapper = {
                 it?.toNewsDataModel()
             }

@@ -1,5 +1,6 @@
 package com.sgupta.composite.di
 
+import com.sgupta.composite.api.AIAssistantApiService
 import com.sgupta.composite.api.NewsApiService
 import com.sgupta.network.client.NetworkClient
 import com.sgupta.network.client.NetworkHost
@@ -19,5 +20,13 @@ internal class NetworkModule {
         networkClient: NetworkClient,
     ): NewsApiService {
         return networkClient.getService(NetworkHost.SERVER_BASE, NewsApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAIAssistantApiService(
+        networkClient: NetworkClient,
+    ): AIAssistantApiService {
+        return networkClient.getService(NetworkHost.SERVER_GEMINI, AIAssistantApiService::class.java)
     }
 }

@@ -1,6 +1,8 @@
 package com.sgupta.composite.di
 
-import com.sgupta.composite.repoimpl.TopNewsRepoImpl
+import com.sgupta.composite.repoimpl.aiassistant.AIAssistantRepoImpl
+import com.sgupta.composite.repoimpl.topnews.TopNewsRepoImpl
+import com.sgupta.domain.repo.AIAssistantRepo
 import com.sgupta.domain.repo.TopNewsRepo
 import dagger.Binds
 import dagger.Module
@@ -13,4 +15,7 @@ abstract class BindModule {
 
     @Binds
     abstract fun bindTopNewsRepo(impl: TopNewsRepoImpl): TopNewsRepo
+
+    @Binds
+    abstract fun bindAIAssistantRepo(impl: AIAssistantRepoImpl): AIAssistantRepo
 }

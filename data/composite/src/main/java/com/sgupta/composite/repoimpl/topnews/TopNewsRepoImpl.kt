@@ -1,4 +1,4 @@
-package com.sgupta.composite.repoimpl
+package com.sgupta.composite.repoimpl.topnews
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig

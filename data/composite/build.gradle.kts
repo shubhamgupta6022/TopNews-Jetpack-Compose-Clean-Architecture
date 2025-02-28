@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -14,6 +16,20 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // Read from local.properties
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            val properties = Properties()
+            properties.load(localPropertiesFile.inputStream())
+            val apiKey = properties.getProperty("GEMINI_API_KEY", "")
+            buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
+        } else {
+            buildConfigField("String", "GEMINI_API_KEY", "\"\"")
+        }
+    }
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
