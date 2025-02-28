@@ -30,6 +30,7 @@ fun NavigationHost() {
             val viewModel = hiltViewModel<HomeScreenViewModel>()
             NewsHomeScreen(
                 state = viewModel.states,
+                aIAssistantBottomSheetViewState = viewModel.aiAssistantBottomSheetStates,
                 onEvent = {
                     when (it) {
                         is HomeScreenEvents.CountriesViewAllClicked -> {

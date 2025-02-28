@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sgupta.composite.aiassistant.model.AIAssistantChatUiModel
+import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
 import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
 import com.sgupta.core.network.Resource
@@ -25,6 +27,14 @@ class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     var states by mutableStateOf(HomeScreenViewState())
+    var aiAssistantBottomSheetStates by mutableStateOf(
+        AIAssistantBottomSheetViewState(
+            aiAssistantChatUiModel = listOf(
+                AIAssistantChatUiModel(isUser = false, message = "How can I help you?"),
+                AIAssistantChatUiModel(isUser = true, message = "What are the top news for today"),
+            )
+        )
+    )
     private var topHeadlinesJob: Job? = null
     private var otherTopHeadlinesJob: Job? = null
     private var newsUiModel: HomeNewsUiModel? = null
