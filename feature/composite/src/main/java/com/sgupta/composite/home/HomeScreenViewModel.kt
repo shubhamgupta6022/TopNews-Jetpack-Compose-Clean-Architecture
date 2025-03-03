@@ -11,6 +11,7 @@ import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
 import com.sgupta.core.network.Resource
 import com.sgupta.domain.model.ArticleDataModel
+import com.sgupta.domain.usecase.GenerateAIAssistantContentUseCase
 import com.sgupta.domain.usecase.GetTopNewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,16 +24,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val getTopNewsUseCase: GetTopNewsUseCase
+    private val getTopNewsUseCase: GetTopNewsUseCase,
+    private val generateAIAssistantContentUseCase: GenerateAIAssistantContentUseCase
 ) : ViewModel() {
 
     var states by mutableStateOf(HomeScreenViewState())
+    private var aiAssistantChatUiModel = mutableListOf(
+        AIAssistantChatUiModel(isUser = false, message = "How can I help you?"),
+    )
     var aiAssistantBottomSheetStates by mutableStateOf(
         AIAssistantBottomSheetViewState(
-            aiAssistantChatUiModel = listOf(
-                AIAssistantChatUiModel(isUser = false, message = "How can I help you?"),
-                AIAssistantChatUiModel(isUser = true, message = "What are the top news for today"),
-            )
+            aiAssistantChatUiModel = aiAssistantChatUiModel
         )
     )
     private var topHeadlinesJob: Job? = null
@@ -90,4 +92,49 @@ class HomeScreenViewModel @Inject constructor(
             .flowOn(Dispatchers.IO)
             .launchIn(viewModelScope)
 
+    fun generateAiAssistantContent(prompt: String) {
+        aiAssistantChatUiModel = aiAssistantChatUiModel.apply {
+            add(
+                AIAssistantChatUiModel(
+                    isUser = true,
+                    message = prompt
+                )
+            )
+        }.toMutableList()
+        aiAssistantBottomSheetStates = aiAssistantBottomSheetStates.copy(
+            loading = false,
+            aiAssistantChatUiModel = aiAssistantChatUiModel
+        )
+        generateAIAssistantContentUseCase.execute(GenerateAIAssistantContentUseCase.Param(prompt = prompt))
+            .onEach {
+                when(it) {
+                    is Resource.Loading -> {
+                        aiAssistantBottomSheetStates = aiAssistantBottomSheetStates.copy(loading = true)
+                    }
+
+                    is Resource.Error -> {
+                        aiAssistantBottomSheetStates = aiAssistantBottomSheetStates.copy(loading = false, error = it.error)
+                    }
+
+                    is Resource.Success -> {
+                        aiAssistantChatUiModel = aiAssistantChatUiModel.apply {
+                            add(
+                                AIAssistantChatUiModel(
+                                    isUser = false,
+                                    message = it.data?.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text.orEmpty()
+                                )
+                            )
+                        }.toMutableList()
+                        aiAssistantBottomSheetStates = aiAssistantBottomSheetStates.copy(
+                            loading = false,
+                            aiAssistantChatUiModel = aiAssistantChatUiModel
+                        )
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
+    }
 }

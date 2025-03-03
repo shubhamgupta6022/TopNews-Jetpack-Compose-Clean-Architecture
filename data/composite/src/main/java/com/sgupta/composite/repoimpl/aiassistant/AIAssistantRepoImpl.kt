@@ -24,7 +24,7 @@ class AIAssistantRepoImpl @Inject constructor(
         )
         return toResponseFlow(
             apiCall = {
-                aiAssistantApiService.generateContent(BuildConfig.GEMINI_API_KEY, requestBody)
+                aiAssistantApiService.generateContent("gemini-2.0-flash",BuildConfig.GEMINI_API_KEY, requestBody)
             }, mapper = {
                 it?.toAiAssistantDataModel()
             }

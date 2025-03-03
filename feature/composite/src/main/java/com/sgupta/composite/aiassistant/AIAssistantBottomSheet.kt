@@ -42,9 +42,14 @@ import com.sgupta.core.theme.colorPrimaryWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AIAssistantBottomSheet(sheetState: SheetState, aIAssistantBottomSheetViewState: AIAssistantBottomSheetViewState, onDismiss: () -> Unit) {
+fun AIAssistantBottomSheet(
+    sheetState: SheetState,
+    aIAssistantBottomSheetViewState: AIAssistantBottomSheetViewState,
+    onDismiss: () -> Unit,
+    sendMessageClicked: (String) -> Unit
+) {
     var userInput by remember { mutableStateOf("") }
-    val chatMessages = remember { aIAssistantBottomSheetViewState.aiAssistantChatUiModel }
+    val chatMessages = aIAssistantBottomSheetViewState.aiAssistantChatUiModel
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -108,10 +113,7 @@ fun AIAssistantBottomSheet(sheetState: SheetState, aIAssistantBottomSheetViewSta
                 IconButton(
                     onClick = {
                         if (userInput.isNotBlank()) {
-                            // chatMessages.add(userInput to true) // User message
-                            // fetchAIResponse(userInput) { response ->
-                            //     chatMessages.add(response to false) // AI response
-                            // }
+                            sendMessageClicked(userInput)
                             userInput = ""
                         }
                     },

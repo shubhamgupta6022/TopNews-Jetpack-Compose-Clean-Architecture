@@ -12,8 +12,8 @@ import com.sgupta.domain.model.UsageMetadataDataModel
 
 data class AIAssistantResponseModel(
     val candidates: List<Candidate>,
-    val modelVersion: String,
-    val usageMetadata: UsageMetadata
+//    val modelVersion: String,
+//    val usageMetadata: UsageMetadata
 )
 
 data class UsageMetadata(
@@ -36,7 +36,7 @@ data class CandidatesTokensDetail(
 
 data class Candidate(
     val avgLogprobs: Double,
-    val citationMetadata: CitationMetadata,
+    val citationMetadata: CitationMetadata? = null,
     val content: Content,
     val finishReason: String
 )
@@ -62,13 +62,13 @@ data class CitationSource(
 
 fun AIAssistantResponseModel.toAiAssistantDataModel() = AIAssistantDataModel(
     candidates = this.candidates.map { it.toCandidateDataModel() },
-    modelVersion = this.modelVersion,
-    usageMetadata = this.usageMetadata.toUsageMetadataDataModel()
+//    modelVersion = this.modelVersion,
+//    usageMetadata = this.usageMetadata.toUsageMetadataDataModel()
 )
 
 fun Candidate.toCandidateDataModel() = CandidateDataModel(
     avgLogprobs,
-    citationMetadata = citationMetadata.toCitationMetadataDataModel(),
+    citationMetadata = citationMetadata?.toCitationMetadataDataModel(),
     content = content.toContentDataModel(),
     finishReason
 )

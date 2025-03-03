@@ -46,6 +46,10 @@ fun NavigationHost() {
                                 Screens.Listing.withArgs("category" to it.category)
                             )
                         }
+
+                        is HomeScreenEvents.GenerateAiContent -> {
+                            viewModel.generateAiAssistantContent(it.prompt)
+                        }
                     }
                 }
             )

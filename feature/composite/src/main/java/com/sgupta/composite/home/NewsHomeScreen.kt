@@ -27,6 +27,7 @@ import com.sgupta.composite.home.components.ChatFloatingActionBtn
 import com.sgupta.composite.home.components.CountriesSectionItem
 import com.sgupta.composite.home.components.NewsHeader
 import com.sgupta.composite.home.components.TopHeadLineSection
+import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
 import com.sgupta.core.ViewEvent
@@ -36,7 +37,11 @@ import com.sgupta.core.components.SectionHeadline
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsHomeScreen(state: HomeScreenViewState, aIAssistantBottomSheetViewState: AIAssistantBottomSheetViewState,onEvent: (ViewEvent) -> Unit) {
+fun NewsHomeScreen(
+    state: HomeScreenViewState,
+    aIAssistantBottomSheetViewState: AIAssistantBottomSheetViewState,
+    onEvent: (ViewEvent) -> Unit
+) {
     val newsUiModel = state.newsUiModel
     val sheetState = rememberModalBottomSheetState()
     var showSheet by remember { mutableStateOf(false) }
@@ -104,9 +109,14 @@ fun NewsHomeScreen(state: HomeScreenViewState, aIAssistantBottomSheetViewState: 
                 showSheet = true
             }
             if (showSheet) {
-                AIAssistantBottomSheet(sheetState = sheetState, aIAssistantBottomSheetViewState) {
-                    showSheet = false
-                }
+                AIAssistantBottomSheet(
+                    sheetState = sheetState,
+                    aIAssistantBottomSheetViewState = aIAssistantBottomSheetViewState,
+                    onDismiss = { showSheet = false },
+                    sendMessageClicked = { message ->
+                        onEvent(HomeScreenEvents.GenerateAiContent(message))
+                    }
+                )
             }
         }
     }

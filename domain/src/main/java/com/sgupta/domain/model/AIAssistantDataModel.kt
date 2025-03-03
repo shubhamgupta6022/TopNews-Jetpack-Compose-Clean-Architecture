@@ -2,8 +2,8 @@ package com.sgupta.domain.model
 
 data class AIAssistantDataModel(
     val candidates: List<CandidateDataModel>,
-    val modelVersion: String,
-    val usageMetadata: UsageMetadataDataModel
+//    val modelVersion: String,
+//    val usageMetadata: UsageMetadataDataModel
 )
 
 data class UsageMetadataDataModel(
@@ -26,7 +26,7 @@ data class CandidatesTokensDetailDataModel(
 
 data class CandidateDataModel(
     val avgLogprobs: Double,
-    val citationMetadata: CitationMetadataDataModel,
+    val citationMetadata: CitationMetadataDataModel?,
     val content: ContentDataModel,
     val finishReason: String
 )
