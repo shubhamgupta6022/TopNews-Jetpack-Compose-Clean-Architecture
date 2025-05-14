@@ -47,9 +47,9 @@ fun ArticleListItem(
         ImageRequest.Builder(context)
             .data(articleDataModel.urlToImage)
             .crossfade(true)
+            .size(100, 100)
             .build()
     }
-
     Card(
         shape = RoundedCornerShape(4.dp),
         modifier = modifier

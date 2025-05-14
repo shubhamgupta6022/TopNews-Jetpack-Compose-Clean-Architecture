@@ -1,12 +1,16 @@
 package com.sgupta.composite.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -17,8 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sgupta.composite.R
 import com.sgupta.composite.aiassistant.AIAssistantBottomSheet
 import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
 import com.sgupta.composite.home.components.ArticleListItem
@@ -26,13 +32,11 @@ import com.sgupta.composite.home.components.CategoriesSectionItem
 import com.sgupta.composite.home.components.ChatFloatingActionBtn
 import com.sgupta.composite.home.components.CountriesSectionItem
 import com.sgupta.composite.home.components.NewsHeader
-import com.sgupta.composite.home.components.TopHeadLineSection
 import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
 import com.sgupta.core.ViewEvent
 import com.sgupta.core.components.LoadingIndicator
-import com.sgupta.core.components.SearchBar
 import com.sgupta.core.components.SectionHeadline
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,25 +56,34 @@ fun NewsHomeScreen(
                 newsUiModel != null -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         item {
-                            SearchBar(Modifier.padding(horizontal = 16.dp))
+                            Image(
+                                painter = painterResource(R.drawable.ic_search_bar_layout),
+                                contentDescription = "Search bar layout",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp)
+                                    .clickable {
+                                        onEvent(HomeScreenEvents.SearchBarClicked)
+                                    }
+                            )
                         }
                         if (newsUiModel.topNewsItemsList.isNotEmpty()) {
                             item {
                                 SectionHeadline(Modifier, "Top Headlines")
                             }
-                            item {
-                                TopHeadLineSection(newsUiModel.topNewsItemsList)
+                            items(
+                                newsUiModel.topNewsItemsList,
+                                key = { it.title.orEmpty() }) { item ->
+                                ArticleListItem(item)
                             }
-                        }
-
-                        items(newsUiModel.topNewsItemsList.size) { index ->
-                            ArticleListItem(newsUiModel.topNewsItemsList[index])
                         }
 
                         if (newsUiModel.categoriesItemsList.isNotEmpty()) {
                             item { SectionHeadline(Modifier, "Categories") }
-                            items(newsUiModel.categoriesItemsList.size) { category ->
-                                CategoriesSectionItem(newsUiModel.categoriesItemsList[category]) {
+                            items(
+                                newsUiModel.categoriesItemsList,
+                                key = { it.categoryType.id }) { category ->
+                                CategoriesSectionItem(category) {
                                     onEvent(it)
                                 }
                             }
@@ -78,8 +91,8 @@ fun NewsHomeScreen(
 
                         if (newsUiModel.countriesItemsList.isNotEmpty()) {
                             item { SectionHeadline(Modifier, "Countries News") }
-                            items(newsUiModel.countriesItemsList.size) { country ->
-                                CountriesSectionItem(newsUiModel.countriesItemsList[country]) {
+                            items(newsUiModel.countriesItemsList, key = { it.id }) { country ->
+                                CountriesSectionItem(country) {
                                     onEvent(it)
                                 }
                             }

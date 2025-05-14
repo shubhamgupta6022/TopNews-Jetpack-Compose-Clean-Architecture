@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sgupta.core.R
@@ -60,4 +61,10 @@ fun Separator() {
         color = LightColors.surface,
         thickness = 1.dp
     )
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun ToolbarComposablePreview() {
+    ToolbarComposable(onBackClick = {}, title = "Title")
 }
