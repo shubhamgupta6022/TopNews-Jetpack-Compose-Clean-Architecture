@@ -19,7 +19,7 @@ import com.sgupta.domain.model.NewsDataModel
 
 @Composable
 fun NewsList(
-    navController: NavHostController,
+    onBackClick: () -> Unit,
     title: String,
     newsPagingItems: LazyPagingItems<NewsDataModel>?,
 ) {
@@ -29,7 +29,7 @@ fun NewsList(
                 .fillMaxWidth()
                 .height(60.dp),
             onBackClick = {
-                navController.popBackStack()
+                onBackClick()
             },
             title = title
         )

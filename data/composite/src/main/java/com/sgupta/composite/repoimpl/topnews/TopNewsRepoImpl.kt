@@ -9,6 +9,7 @@ import com.sgupta.core.flows.toResponseFlow
 import com.sgupta.core.network.Resource
 import com.sgupta.domain.model.NewsDataModel
 import com.sgupta.domain.model.request.NewsRequestParam
+import com.sgupta.domain.model.request.NewsSearchQueryRequestParam
 import com.sgupta.domain.repo.TopNewsRepo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -55,5 +56,16 @@ class TopNewsRepoImpl @Inject constructor(
                 categoryNewsPagingSourceFactory.createCategoryNewsPagingSource(param.sources, param.pageSize, apiKey)
             }
         ).flow
+    }
+
+    override fun getNewsSearchQuery(param: NewsSearchQueryRequestParam): Flow<Resource<NewsDataModel>> {
+        return toResponseFlow(
+            apiCall = {
+                newsApiService.getSearchNews(param.q, apiKey = apiKey)
+            },
+            mapper = {
+                it?.toNewsDataModel()
+            }
+        )
     }
 }

@@ -26,6 +26,6 @@ fun NewsNavHost(
         addSplashScreen(navController)
         addHomeScreen(navController)
         addListingScreen(navController)
-        addSearchScreen()
+        addSearchScreen(navController)
     }
 }

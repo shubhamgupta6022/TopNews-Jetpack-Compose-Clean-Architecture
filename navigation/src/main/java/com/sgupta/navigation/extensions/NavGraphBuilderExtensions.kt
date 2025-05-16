@@ -13,12 +13,13 @@ import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.listing.NewsList
 import com.sgupta.composite.listing.NewsListViewModel
 import com.sgupta.composite.search.SearchScreen
+import com.sgupta.composite.search.SearchScreenViewModel
+import com.sgupta.composite.search.events.SearchScreenEvents
 import com.sgupta.composite.splash.SplashScreen
 import com.sgupta.navigation.destinations.Home
 import com.sgupta.navigation.destinations.Listing
 import com.sgupta.navigation.destinations.Search
 import com.sgupta.navigation.destinations.Splash
-
 
 /**
  * Add splash screen to navigation graph
@@ -56,14 +57,17 @@ fun NavGraphBuilder.addHomeScreen(navController: NavController) {
                             Listing(country = event.id).createRoute()
                         )
                     }
+
                     is HomeScreenEvents.CategoryFilterClicked -> {
                         navController.navigate(
                             Listing(category = event.category).createRoute()
                         )
                     }
+
                     is HomeScreenEvents.GenerateAiContent -> {
                         viewModel.generateAiAssistantContent(event.prompt)
                     }
+
                     is HomeScreenEvents.SearchBarClicked -> {
                         navController.navigate(Search.route)
                     }
@@ -90,13 +94,15 @@ fun NavGraphBuilder.addListingScreen(navController: NavHostController) {
                 "uk" -> "UK"
                 else -> "Country News"
             }
+
             destination.category?.isNotEmpty() == true -> destination.category
             else -> "News"
         }
 
-        val viewModel = hiltViewModel<NewsListViewModel, NewsListViewModel.NewsListViewModelFactory> { factory ->
-            factory.create(destination.country, destination.category)
-        }
+        val viewModel =
+            hiltViewModel<NewsListViewModel, NewsListViewModel.NewsListViewModelFactory> { factory ->
+                factory.create(destination.country, destination.category)
+            }
 
         val newsPagingItems = if (destination.country?.isNotEmpty() == true) {
             viewModel.countryStates?.collectAsLazyPagingItems()
@@ -104,17 +110,24 @@ fun NavGraphBuilder.addListingScreen(navController: NavHostController) {
             viewModel.categoryState?.collectAsLazyPagingItems()
         }
 
-        NewsList(navController, title, newsPagingItems)
+        NewsList(onBackClick = { navController.popBackStack() }, title, newsPagingItems)
     }
 }
 
 /**
  * Add search screen to navigation graph
  */
-fun NavGraphBuilder.addSearchScreen() {
+fun NavGraphBuilder.addSearchScreen(navController: NavHostController) {
     composable(
         route = Search.route
     ) {
-        SearchScreen()
+        val viewModels = hiltViewModel<SearchScreenViewModel>()
+        SearchScreen(
+            state = viewModels.states,
+            onBackClick = { navController.popBackStack() },
+            onEvent = {
+                viewModels.onEvent(it)
+            }
+        )
     }
 }

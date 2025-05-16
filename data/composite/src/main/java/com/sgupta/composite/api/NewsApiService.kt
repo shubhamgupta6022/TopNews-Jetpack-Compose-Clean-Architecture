@@ -30,4 +30,12 @@ interface NewsApiService {
         @Query("pageSize") pageSize: Int,
         @Query("apiKey") apiKey: String
     ): Response<NewsResponseModel>
+
+    @GET("everything")
+    suspend fun getSearchNews(
+        @Query("q") query: String,
+        @Query("from") fromDate: String = "",
+        @Query("sortBy") sortBy: String = "popularity",
+        @Query("apiKey") apiKey: String
+    ): Response<NewsResponseModel>
 }
