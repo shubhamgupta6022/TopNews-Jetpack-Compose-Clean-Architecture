@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sgupta.composite.R
-import com.sgupta.core.theme.Typography
+import com.sgupta.core.theme.typography.Typography
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)

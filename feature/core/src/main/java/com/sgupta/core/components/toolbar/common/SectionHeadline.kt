@@ -1,4 +1,4 @@
-package com.sgupta.core.components
+package com.sgupta.core.components.toolbar.common
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.sgupta.core.theme.Typography
+import com.sgupta.core.theme.typography.Typography
 
 @Composable
 fun SectionHeadline(modifier: Modifier = Modifier, heading: String) {

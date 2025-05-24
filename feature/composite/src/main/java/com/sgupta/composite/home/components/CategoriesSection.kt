@@ -31,11 +31,11 @@ import com.sgupta.composite.R
 import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.home.model.CategoriesUiModel
 import com.sgupta.composite.home.model.CategoryType
-import com.sgupta.core.ViewEvent
-import com.sgupta.core.theme.Typography
-import com.sgupta.core.theme.colorGrey100
-import com.sgupta.core.theme.colorGrey700
-import com.sgupta.core.theme.colorGreyLight
+import com.sgupta.core.state.ViewEvent
+import com.sgupta.core.theme.typography.Typography
+import com.sgupta.core.theme.color.colorGrey100
+import com.sgupta.core.theme.color.colorGrey700
+import com.sgupta.core.theme.color.colorGreyLight
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

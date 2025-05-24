@@ -35,9 +35,9 @@ import com.sgupta.composite.home.components.NewsHeader
 import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
-import com.sgupta.core.ViewEvent
-import com.sgupta.core.components.LoadingIndicator
-import com.sgupta.core.components.SectionHeadline
+import com.sgupta.core.state.ViewEvent
+import com.sgupta.core.components.toolbar.common.LoadingIndicator
+import com.sgupta.core.components.toolbar.common.SectionHeadline
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

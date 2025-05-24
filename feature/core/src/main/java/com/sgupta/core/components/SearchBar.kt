@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sgupta.core.theme.colorGreyLight
+import com.sgupta.core.theme.color.colorGreyLight
 
 @Composable
 fun SearchBar(

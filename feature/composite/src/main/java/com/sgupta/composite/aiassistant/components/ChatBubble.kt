@@ -15,11 +15,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sgupta.composite.aiassistant.model.AIAssistantChatUiModel
-import com.sgupta.core.theme.Typography
-import com.sgupta.core.theme.colorGrey100
-import com.sgupta.core.theme.colorPrimaryBlack
-import com.sgupta.core.theme.colorPrimaryWhite
-import com.sgupta.core.theme.colorSecondaryInfoBlue
+import com.sgupta.core.theme.typography.Typography
+import com.sgupta.core.theme.color.colorGrey100
+import com.sgupta.core.theme.color.colorPrimaryBlack
+import com.sgupta.core.theme.color.colorPrimaryWhite
+import com.sgupta.core.theme.color.colorSecondaryInfoBlue
 
 @Composable
 fun ChatBubble(aiAssistantChatUiModel: AIAssistantChatUiModel) {

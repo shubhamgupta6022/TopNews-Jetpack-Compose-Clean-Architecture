@@ -2,19 +2,17 @@ package com.sgupta.composite.listing
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.sgupta.composite.listing.components.NewsListItem
-import com.sgupta.core.components.LoadingIndicator
-import com.sgupta.core.components.ToolbarComposable
+import com.sgupta.core.components.toolbar.common.LoadingIndicator
+import com.sgupta.core.components.toolbar.GenericToolbar
+import com.sgupta.core.components.toolbar.model.ToolbarContent
+import com.sgupta.core.components.toolbar.utils.ToolbarDefaults
 import com.sgupta.domain.model.NewsDataModel
 
 @Composable
@@ -24,14 +22,11 @@ fun NewsList(
     newsPagingItems: LazyPagingItems<NewsDataModel>?,
 ) {
     Column {
-        ToolbarComposable(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp),
-            onBackClick = {
+        GenericToolbar(
+            navigationIcon = ToolbarDefaults.backButton {
                 onBackClick()
             },
-            title = title
+            content = ToolbarContent.Title(title)
         )
 
         newsPagingItems?.let {
@@ -95,37 +90,5 @@ fun NewsList(
                 }
             }
         }
-
-
-//        if (newsPagingItems.loadState.refresh is LoadState.Loading) {
-//            LoadingIndicator()
-//        } else {
-//            LazyColumn(modifier = Modifier.fillMaxSize()) {
-//                items(newsPagingItems.itemCount) { index ->
-//                    newsPagingItems[index]?.let {
-//                        NewsListItem(it.articles.get(0))
-//                    }
-//                }
-//
-//            }
-//        }
-//        when {
-//            state.newsUiModel?.isNotEmpty() == true -> {
-//                LazyColumn(modifier = Modifier.fillMaxSize()) {
-//                    items(newsPagingItems.itemCount) { index ->
-//                        NewsListItem(state.newsUiModel[index])
-//                    }
-//                }
-//            }
-//            state.loading -> {
-//                LoadingIndicator()
-//            }
-//            state.error != null -> {
-//                Text("Error: ${state.error.message}")
-//            }
-//            else -> {
-//                Text("No news available")
-//            }
-//        }
     }
 }

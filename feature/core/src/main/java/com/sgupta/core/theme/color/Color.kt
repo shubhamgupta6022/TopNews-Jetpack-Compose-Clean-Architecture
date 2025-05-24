@@ -1,4 +1,4 @@
-package com.sgupta.core.theme
+package com.sgupta.core.theme.color
 
 import androidx.compose.ui.graphics.Color
 

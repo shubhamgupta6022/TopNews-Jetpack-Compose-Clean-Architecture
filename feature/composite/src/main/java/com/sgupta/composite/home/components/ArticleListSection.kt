@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.sgupta.core.theme.Typography
+import com.sgupta.core.theme.typography.Typography
 import com.sgupta.domain.model.ArticleDataModel
 import com.sgupta.domain.model.SourceDataModel
 

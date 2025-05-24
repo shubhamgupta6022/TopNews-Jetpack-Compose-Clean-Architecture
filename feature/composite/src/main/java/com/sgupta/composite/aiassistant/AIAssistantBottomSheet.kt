@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import com.sgupta.composite.R
 import com.sgupta.composite.aiassistant.components.ChatBubble
 import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
-import com.sgupta.core.theme.Typography
-import com.sgupta.core.theme.colorGreyLightBorder
-import com.sgupta.core.theme.colorPrimaryWhite
+import com.sgupta.core.theme.typography.Typography
+import com.sgupta.core.theme.color.colorGreyLightBorder
+import com.sgupta.core.theme.color.colorPrimaryWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

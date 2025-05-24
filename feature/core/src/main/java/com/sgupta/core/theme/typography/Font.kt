@@ -1,4 +1,4 @@
-package com.sgupta.core.theme
+package com.sgupta.core.theme.typography
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
