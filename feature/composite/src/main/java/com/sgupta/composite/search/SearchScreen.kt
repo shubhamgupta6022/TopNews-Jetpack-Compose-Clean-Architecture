@@ -10,7 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,10 +32,10 @@ fun SearchScreen(
     onEvent: (SearchScreenEvents) -> Unit
 ) {
     val articleModel = state.newsUiModel
-//    val focusRequester = remember { FocusRequester() }
-//    LaunchedEffect(Unit) {
-//        focusRequester.requestFocus()
-//    }
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     Column(
         modifier = Modifier
@@ -43,7 +46,13 @@ fun SearchScreen(
             navigationIcon = ToolbarDefaults.backButton {
                 onBackClick()
             },
-            content = ToolbarContent.Title("Screen Title")
+            content = ToolbarContent.SearchBar(
+                placeholder = "Search News...",
+                onSearch = {
+                    onEvent(SearchScreenEvents.SearchQuery(query = it))
+                },
+                focusRequester = focusRequester
+            )
         )
         Box {
             when {
@@ -53,7 +62,9 @@ fun SearchScreen(
                             items(
                                 articleModel,
                                 key = { it.title.orEmpty() }) { item ->
-                                ArticleListItem(item)
+                                ArticleListItem(item) {
+                                    onEvent(SearchScreenEvents.NewsItemClicked(item.title.orEmpty(), item.url.orEmpty()))
+                                }
                             }
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }

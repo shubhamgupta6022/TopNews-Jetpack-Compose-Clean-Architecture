@@ -15,7 +15,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     var isAnimationFinished by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(1500) // Splash screen delay time (1.5 seconds)
+        delay(500) // Splash screen delay time (1.5 seconds)
         isAnimationFinished = true
         onSplashFinished()
     }

@@ -9,6 +9,7 @@ import com.sgupta.navigation.destinations.NewsDestination
 import com.sgupta.navigation.destinations.Splash
 import com.sgupta.navigation.extensions.addHomeScreen
 import com.sgupta.navigation.extensions.addListingScreen
+import com.sgupta.navigation.extensions.addNewsDetailScreen
 import com.sgupta.navigation.extensions.addSearchScreen
 import com.sgupta.navigation.extensions.addSplashScreen
 
@@ -27,5 +28,6 @@ fun NewsNavHost(
         addHomeScreen(navController)
         addListingScreen(navController)
         addSearchScreen(navController)
+        addNewsDetailScreen(navController)
     }
 }

@@ -7,4 +7,5 @@ sealed class HomeScreenEvents : ViewEvent {
     data class CategoryFilterClicked(val category: String) : HomeScreenEvents()
     data class GenerateAiContent(val prompt: String) : HomeScreenEvents()
     data object SearchBarClicked : HomeScreenEvents()
+    data class NewsItemClicked(val title: String, val url: String) : HomeScreenEvents()
 }

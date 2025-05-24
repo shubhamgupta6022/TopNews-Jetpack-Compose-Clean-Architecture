@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sgupta.composite.aiassistant.model.AIAssistantChatUiModel
 import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
+import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
 import com.sgupta.core.network.Resource
+import com.sgupta.core.state.ViewEvent
 import com.sgupta.domain.model.ArticleDataModel
 import com.sgupta.domain.usecase.GenerateAIAssistantContentUseCase
 import com.sgupta.domain.usecase.GetTopNewsUseCase
@@ -92,7 +94,17 @@ class HomeScreenViewModel @Inject constructor(
             .flowOn(Dispatchers.IO)
             .launchIn(viewModelScope)
 
-    fun generateAiAssistantContent(prompt: String) {
+    fun onEvent(event: ViewEvent) {
+        when(event) {
+            is HomeScreenEvents.GenerateAiContent -> {
+                generateAiAssistantContent(event.prompt)
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun generateAiAssistantContent(prompt: String) {
         aiAssistantChatUiModel = aiAssistantChatUiModel.apply {
             add(
                 AIAssistantChatUiModel(

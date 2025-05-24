@@ -1,5 +1,6 @@
 package com.sgupta.composite.home.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.core.theme.typography.Typography
 import com.sgupta.domain.model.ArticleDataModel
 import com.sgupta.domain.model.SourceDataModel
@@ -40,7 +42,8 @@ private val descriptionStyle = Typography.bodyMedium.copy(fontSize = 14.sp)
 @Composable
 fun ArticleListItem(
     articleDataModel: ArticleDataModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (HomeScreenEvents) -> Unit = {}
 ) {
     val context = LocalContext.current
     val imageRequest = remember(articleDataModel.urlToImage) {
@@ -54,7 +57,10 @@ fun ArticleListItem(
         shape = RoundedCornerShape(4.dp),
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable {
+                onItemClick(HomeScreenEvents.NewsItemClicked(articleDataModel.title.orEmpty(), articleDataModel.url.orEmpty()))
+            },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp),
         content = {
@@ -102,7 +108,6 @@ private fun ArticleListItemPreview() {
             source = SourceDataModel(),
             title = "Test preview",
             description = "Preview Description",
-
         )
     )
 }

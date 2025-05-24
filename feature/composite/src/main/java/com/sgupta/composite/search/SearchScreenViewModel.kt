@@ -37,6 +37,7 @@ class SearchScreenViewModel @Inject constructor(
             is SearchScreenEvents.SearchQuery -> {
                 _searchQuery.value = event.query
             }
+            else -> {}
         }
     }
 

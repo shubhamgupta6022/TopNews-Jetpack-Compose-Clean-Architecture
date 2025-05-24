@@ -74,7 +74,9 @@ fun NewsHomeScreen(
                             items(
                                 newsUiModel.topNewsItemsList,
                                 key = { it.title.orEmpty() }) { item ->
-                                ArticleListItem(item)
+                                ArticleListItem(item) {
+                                    onEvent(it)
+                                }
                             }
                         }
 

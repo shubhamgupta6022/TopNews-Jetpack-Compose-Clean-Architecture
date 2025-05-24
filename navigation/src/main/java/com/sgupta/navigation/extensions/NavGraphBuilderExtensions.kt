@@ -12,12 +12,14 @@ import com.sgupta.composite.home.NewsHomeScreen
 import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.listing.NewsList
 import com.sgupta.composite.listing.NewsListViewModel
+import com.sgupta.composite.newsdetail.NewsDetailScreen
 import com.sgupta.composite.search.SearchScreen
 import com.sgupta.composite.search.SearchScreenViewModel
 import com.sgupta.composite.search.events.SearchScreenEvents
 import com.sgupta.composite.splash.SplashScreen
 import com.sgupta.navigation.destinations.Home
 import com.sgupta.navigation.destinations.Listing
+import com.sgupta.navigation.destinations.NewsDetail
 import com.sgupta.navigation.destinations.Search
 import com.sgupta.navigation.destinations.Splash
 
@@ -57,19 +59,24 @@ fun NavGraphBuilder.addHomeScreen(navController: NavController) {
                             Listing(country = event.id).createRoute()
                         )
                     }
-
                     is HomeScreenEvents.CategoryFilterClicked -> {
                         navController.navigate(
                             Listing(category = event.category).createRoute()
                         )
                     }
-
-                    is HomeScreenEvents.GenerateAiContent -> {
-                        viewModel.generateAiAssistantContent(event.prompt)
-                    }
-
                     is HomeScreenEvents.SearchBarClicked -> {
                         navController.navigate(Search.route)
+                    }
+                    is HomeScreenEvents.NewsItemClicked -> {
+                        navController.navigate(
+                            NewsDetail(
+                                title = event.title,
+                                url = event.url
+                            ).createRoute()
+                        )
+                    }
+                    else -> {
+                        viewModel.onEvent(event)
                     }
                 }
             }
@@ -126,8 +133,35 @@ fun NavGraphBuilder.addSearchScreen(navController: NavHostController) {
             state = viewModels.states,
             onBackClick = { navController.popBackStack() },
             onEvent = {
-                viewModels.onEvent(it)
+                when {
+                    it is SearchScreenEvents.NewsItemClicked -> {
+                        navController.navigate(
+                            NewsDetail(
+                                title = it.title,
+                                url = it.url
+                            ).createRoute()
+                        )
+                    }
+                    else -> viewModels.onEvent(it)
+                }
             }
+        )
+    }
+}
+
+/**
+ * Add news detail screen to navigation graph
+ */
+fun NavGraphBuilder.addNewsDetailScreen(navController: NavController) {
+    composable(
+        route = NewsDetail().route,
+        arguments = NewsDetail().arguments()
+    ) { backStackEntry ->
+        val destination = remember { NewsDetail.fromNavBackStackEntry(backStackEntry) }
+        NewsDetailScreen(
+            onBackClick = { navController.popBackStack() },
+            title = destination.title.orEmpty(),
+            url = destination.url.orEmpty()
         )
     }
 }

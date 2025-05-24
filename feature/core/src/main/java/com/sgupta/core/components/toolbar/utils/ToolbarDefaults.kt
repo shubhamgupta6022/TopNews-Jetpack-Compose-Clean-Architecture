@@ -1,8 +1,6 @@
 package com.sgupta.core.components.toolbar.utils
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import com.sgupta.core.R
 import com.sgupta.core.components.toolbar.model.ToolbarAction
 
