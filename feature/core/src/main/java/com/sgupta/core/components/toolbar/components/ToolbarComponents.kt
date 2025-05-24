@@ -1,15 +1,16 @@
 package com.sgupta.core.components.toolbar.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,9 +25,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.sgupta.core.R
 import com.sgupta.core.components.toolbar.model.ToolbarAction
+import com.sgupta.core.theme.color.colorGreyLightBorder
+import com.sgupta.core.theme.typography.Typography
 
 // Composable for search bar content
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchBarContent(
     placeholder: String,
@@ -35,7 +41,7 @@ internal fun SearchBarContent(
 ) {
     var searchText by remember { mutableStateOf("") }
 
-    OutlinedTextField(
+    TextField(
         value = searchText,
         onValueChange = {
             searchText = it
@@ -44,25 +50,40 @@ internal fun SearchBarContent(
         placeholder = {
             Text(
                 text = placeholder,
-                style = MaterialTheme.typography.bodyMedium
+                style = Typography.titleSmall.copy(
+                    color = Color.Gray,
+                    fontSize = 12.sp
+                )
             )
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp)
+            .height(48.dp)
+            .background(
+                color = colorGreyLightBorder, // very light gray background like the image
+                shape = RoundedCornerShape(12.dp)
+            )
             .then(
                 if (focusRequester != null) {
                     Modifier.focusRequester(focusRequester)
-                } else {
-                    Modifier
-                }
+                } else Modifier
             ),
         singleLine = true,
-        shape = RoundedCornerShape(20.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-        )
+        shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            cursorColor = Color.Black
+        ),
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_search),
+                contentDescription = "Search",
+                tint = Color.Gray,
+            )
+        }
     )
 }
 
