@@ -1,5 +1,6 @@
 package com.sgupta.composite.listing.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -27,7 +28,11 @@ import com.sgupta.core.theme.color.colorGrey700
 import com.sgupta.domain.model.ArticleDataModel
 
 @Composable
-fun NewsListItem(articleDataModel: ArticleDataModel) {
+fun NewsListItem(
+    articleDataModel: ArticleDataModel,
+    modifier: Modifier = Modifier,
+    onItemClick: (ArticleDataModel) -> Unit = {}
+) {
     val context = LocalContext.current
     val imageRequest = remember(articleDataModel.urlToImage) {
         ImageRequest.Builder(context)
@@ -36,8 +41,9 @@ fun NewsListItem(articleDataModel: ArticleDataModel) {
             .build()
     }
     Card(
-        modifier = Modifier
-            .padding(16.dp),
+        modifier = modifier
+            .padding(16.dp)
+            .clickable { onItemClick(articleDataModel) },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White // Set the background color to white

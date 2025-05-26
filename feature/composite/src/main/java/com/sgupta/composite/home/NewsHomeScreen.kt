@@ -24,6 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.sgupta.analytics.constants.AnalyticsEvents
+import com.sgupta.analytics.constants.AnalyticsProperties
+import com.sgupta.analytics.constants.AnalyticsScreens
+import com.sgupta.analytics.extensions.TrackScreenView
+import com.sgupta.analytics.extensions.logAIAssistantMessage
+import com.sgupta.analytics.extensions.logButtonClick
+import com.sgupta.analytics.extensions.logError
+import com.sgupta.analytics.extensions.logNewsArticleClick
+import com.sgupta.analytics.manager.AnalyticsManager
+import com.sgupta.analytics.manager.MockAnalyticsManager
 import com.sgupta.composite.R
 import com.sgupta.composite.aiassistant.AIAssistantBottomSheet
 import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
@@ -44,11 +55,29 @@ import com.sgupta.core.components.toolbar.common.SectionHeadline
 fun NewsHomeScreen(
     state: HomeScreenViewState,
     aIAssistantBottomSheetViewState: AIAssistantBottomSheetViewState,
-    onEvent: (ViewEvent) -> Unit
+    onEvent: (ViewEvent) -> Unit,
+    analyticsManager: AnalyticsManager
 ) {
     val newsUiModel = state.newsUiModel
     val sheetState = rememberModalBottomSheetState()
     var showSheet by remember { mutableStateOf(false) }
+
+    // Track screen view with additional properties
+    analyticsManager.TrackScreenView(
+        screenName = AnalyticsScreens.HOME_SCREEN,
+        additionalProperties = mapOf(
+            AnalyticsProperties.FEATURE_NAME to "home_feed",
+            "has_news_data" to (newsUiModel != null),
+            "news_sections_count" to if (newsUiModel != null) {
+                listOf(
+                    newsUiModel.topNewsItemsList.isNotEmpty(),
+                    newsUiModel.categoriesItemsList.isNotEmpty(),
+                    newsUiModel.countriesItemsList.isNotEmpty()
+                ).count { it }
+            } else 0
+        )
+    )
+
     Column {
         NewsHeader()
         Box {
@@ -63,6 +92,11 @@ fun NewsHomeScreen(
                                     .fillMaxWidth()
                                     .padding(top = 16.dp)
                                     .clickable {
+                                        analyticsManager.logButtonClick(
+                                            screenName = AnalyticsScreens.HOME_SCREEN,
+                                            buttonName = "search_bar",
+                                            buttonType = "navigation"
+                                        )
                                         onEvent(HomeScreenEvents.SearchBarClicked)
                                     }
                             )
@@ -74,9 +108,21 @@ fun NewsHomeScreen(
                             items(
                                 newsUiModel.topNewsItemsList,
                                 key = { it.title.orEmpty() }) { item ->
-                                ArticleListItem(item) {
-                                    onEvent(it)
-                                }
+                                ArticleListItem(
+                                    articleDataModel = item,
+                                    onItemClick = { event ->
+                                        // Log news article click
+                                        analyticsManager.logNewsArticleClick(
+                                            screenName = AnalyticsScreens.HOME_SCREEN,
+                                            title = item.title.orEmpty(),
+                                            url = item.url.orEmpty(),
+                                            source = item.source?.name,
+                                            category = "top_headlines",
+                                            position = newsUiModel.topNewsItemsList.indexOf(item)
+                                        )
+                                        onEvent(event)
+                                    }
+                                )
                             }
                         }
 
@@ -85,18 +131,40 @@ fun NewsHomeScreen(
                             items(
                                 newsUiModel.categoriesItemsList,
                                 key = { it.categoryType.id }) { category ->
-                                CategoriesSectionItem(category) {
-                                    onEvent(it)
-                                }
+                                CategoriesSectionItem(
+                                    category = category,
+                                    onEvent = { event ->
+                                        analyticsManager.logEvent(
+                                            com.sgupta.analytics.builder.AnalyticsEventBuilder()
+                                                .setScreenName(AnalyticsScreens.HOME_SCREEN)
+                                                .setEventType(com.sgupta.analytics.model.EventType.CLICK)
+                                                .setEventName(AnalyticsEvents.NEWS_CATEGORY_CLICKED)
+                                                .addParameter(AnalyticsProperties.NEWS_CATEGORY, category.categoryType.id)
+                                                .addParameter(AnalyticsProperties.LIST_POSITION, newsUiModel.categoriesItemsList.indexOf(category))
+                                        )
+                                        onEvent(event)
+                                    }
+                                )
                             }
                         }
 
                         if (newsUiModel.countriesItemsList.isNotEmpty()) {
                             item { SectionHeadline(Modifier, "Countries News") }
                             items(newsUiModel.countriesItemsList, key = { it.id }) { country ->
-                                CountriesSectionItem(country) {
-                                    onEvent(it)
-                                }
+                                CountriesSectionItem(
+                                    countriesUiModel = country,
+                                    onEvent = { event ->
+                                        analyticsManager.logEvent(
+                                            com.sgupta.analytics.builder.AnalyticsEventBuilder()
+                                                .setScreenName(AnalyticsScreens.HOME_SCREEN)
+                                                .setEventType(com.sgupta.analytics.model.EventType.CLICK)
+                                                .setEventName(AnalyticsEvents.NEWS_COUNTRY_CLICKED)
+                                                .addParameter(AnalyticsProperties.NEWS_COUNTRY, country.id)
+                                                .addParameter(AnalyticsProperties.LIST_POSITION, newsUiModel.countriesItemsList.indexOf(country))
+                                        )
+                                        onEvent(event)
+                                    }
+                                )
                             }
                         }
 
@@ -109,6 +177,12 @@ fun NewsHomeScreen(
                 }
 
                 state.error != null -> {
+                    // Log error occurrence
+                    analyticsManager.logError(
+                        screenName = AnalyticsScreens.HOME_SCREEN,
+                        errorType = "api_error",
+                        errorMessage = state.error.message ?: "Unknown error"
+                    )
                     Text("Error: ${state.error.message}")
                 }
 
@@ -121,16 +195,35 @@ fun NewsHomeScreen(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 16.dp)
             ) {
+                analyticsManager.logButtonClick(
+                    screenName = AnalyticsScreens.HOME_SCREEN,
+                    buttonName = "ai_assistant_fab",
+                    buttonType = "floating_action"
+                )
                 showSheet = true
             }
             if (showSheet) {
                 AIAssistantBottomSheet(
                     sheetState = sheetState,
                     aIAssistantBottomSheetViewState = aIAssistantBottomSheetViewState,
-                    onDismiss = { showSheet = false },
+                    onDismiss = { 
+                        analyticsManager.logEvent(
+                            com.sgupta.analytics.builder.AnalyticsEventBuilder()
+                                .setScreenName(AnalyticsScreens.AI_ASSISTANT_BOTTOM_SHEET)
+                                .setEventType(com.sgupta.analytics.model.EventType.CUSTOM)
+                                .setEventName(AnalyticsEvents.AI_ASSISTANT_CLOSED)
+                        )
+                        showSheet = false 
+                    },
                     sendMessageClicked = { message ->
+                        analyticsManager.logAIAssistantMessage(
+                            screenName = AnalyticsScreens.AI_ASSISTANT_BOTTOM_SHEET,
+                            messageLength = message.length,
+                            conversationTurn = aIAssistantBottomSheetViewState.aiAssistantChatUiModel?.size ?: 0
+                        )
                         onEvent(HomeScreenEvents.GenerateAiContent(message))
-                    }
+                    },
+                    analyticsManager = analyticsManager
                 )
             }
         }
@@ -143,8 +236,8 @@ fun NewsHomeScreen(
 private fun NewsHomeScreenPreview() {
     NewsHomeScreen(
         state = HomeScreenViewState(newsUiModel = HomeNewsUiModel()),
-        aIAssistantBottomSheetViewState = AIAssistantBottomSheetViewState(aiAssistantChatUiModel = emptyList())
-    ) {
-
-    }
+        aIAssistantBottomSheetViewState = AIAssistantBottomSheetViewState(aiAssistantChatUiModel = emptyList()),
+        onEvent = {},
+        analyticsManager = MockAnalyticsManager()
+    )
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "126679528894",
+    "project_id": "topnews-f20be",
+    "storage_bucket": "topnews-f20be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126679528894:android:7a1f5788350880240ff5ef",
+        "android_client_info": {
+          "package_name": "com.sgupta.topnews"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCID7WELoBqTWH1ccEwcCMr9d89Ie0sSGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,12 +1,18 @@
 package com.sgupta.composite.newsdetail
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sgupta.core.components.toolbar.GenericToolbar
+import com.sgupta.core.components.toolbar.common.LoadingIndicator
 import com.sgupta.core.components.toolbar.model.ToolbarContent
 import com.sgupta.core.components.toolbar.utils.ToolbarDefaults
 import com.sgupta.core.components.webview.GenericWebView
@@ -18,6 +24,8 @@ fun NewsDetailScreen(
     title: String,
     url: String
 ) {
+    var isLoading by remember { mutableStateOf(true) }
+
     Column(modifier = Modifier.fillMaxSize()) {
         GenericToolbar(
             modifier = Modifier.fillMaxWidth(),
@@ -26,24 +34,30 @@ fun NewsDetailScreen(
             },
             content = ToolbarContent.Title(title)
         )
-        
-        GenericWebView(
-            modifier = Modifier.fillMaxSize(),
-            url = "",
-            callbacks = object : WebViewCallbacks {
-                override fun onPageStarted(url: String) {
-                    // Handle page load start
-                }
 
-                override fun onPageFinished(url: String) {
-                    // Handle page load finish
-                }
+        Box(modifier = Modifier.fillMaxSize()) {
+            GenericWebView(
+                modifier = Modifier.fillMaxSize(),
+                url = url,
+                callbacks = object : WebViewCallbacks {
+                    override fun onPageStarted(url: String) {
+                        isLoading = true
+                    }
 
-                override fun onError(error: String) {
-                    // Handle error
+                    override fun onPageFinished(url: String) {
+                        isLoading = false
+                    }
+
+                    override fun onError(error: String) {
+                        isLoading = false
+                    }
                 }
+            )
+
+            if (isLoading) {
+                LoadingIndicator()
             }
-        )
+        }
     }
 }
 

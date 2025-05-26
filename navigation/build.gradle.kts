@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.sgupta.navigation"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -37,7 +37,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -61,6 +61,7 @@ dependencies {
 
     implementation(project(":feature:composite"))
     implementation(project(":feature:core"))
+    implementation(project(":analytics"))
 
     // dagger hilt dependency
     implementation(libs.hilt.android)

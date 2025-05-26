@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.sgupta.analytics.manager.AnalyticsManager
 import com.sgupta.composite.home.HomeScreenViewModel
 import com.sgupta.composite.home.NewsHomeScreen
 import com.sgupta.composite.home.events.HomeScreenEvents
@@ -43,7 +44,7 @@ fun NavGraphBuilder.addSplashScreen(navController: NavController) {
 /**
  * Add home screen to navigation graph
  */
-fun NavGraphBuilder.addHomeScreen(navController: NavController) {
+fun NavGraphBuilder.addHomeScreen(navController: NavController, analyticsManager: AnalyticsManager) {
     composable(
         route = Home.route
     ) {
@@ -79,7 +80,8 @@ fun NavGraphBuilder.addHomeScreen(navController: NavController) {
                         viewModel.onEvent(event)
                     }
                 }
-            }
+            },
+            analyticsManager = analyticsManager
         )
     }
 }
@@ -87,7 +89,10 @@ fun NavGraphBuilder.addHomeScreen(navController: NavController) {
 /**
  * Add listing screen to navigation graph
  */
-fun NavGraphBuilder.addListingScreen(navController: NavHostController) {
+fun NavGraphBuilder.addListingScreen(
+    navController: NavHostController,
+    analyticsManager: AnalyticsManager
+) {
     composable(
         route = Listing().route,
         arguments = Listing().arguments()
@@ -117,14 +122,17 @@ fun NavGraphBuilder.addListingScreen(navController: NavHostController) {
             viewModel.categoryState?.collectAsLazyPagingItems()
         }
 
-        NewsList(onBackClick = { navController.popBackStack() }, title, newsPagingItems)
+        NewsList(onBackClick = { navController.popBackStack() }, title, newsPagingItems, analyticsManager)
     }
 }
 
 /**
  * Add search screen to navigation graph
  */
-fun NavGraphBuilder.addSearchScreen(navController: NavHostController) {
+fun NavGraphBuilder.addSearchScreen(
+    navController: NavHostController,
+    analyticsManager: AnalyticsManager
+) {
     composable(
         route = Search.route
     ) {
@@ -144,7 +152,8 @@ fun NavGraphBuilder.addSearchScreen(navController: NavHostController) {
                     }
                     else -> viewModels.onEvent(it)
                 }
-            }
+            },
+            analyticsManager = analyticsManager
         )
     }
 }

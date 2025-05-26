@@ -33,6 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.sgupta.analytics.constants.AnalyticsEvents
+import com.sgupta.analytics.constants.AnalyticsScreens
+import com.sgupta.analytics.extensions.TrackScreenView
+import com.sgupta.analytics.extensions.logButtonClick
+import com.sgupta.analytics.manager.AnalyticsManager
 import com.sgupta.composite.R
 import com.sgupta.composite.aiassistant.components.ChatBubble
 import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
@@ -46,13 +51,32 @@ fun AIAssistantBottomSheet(
     sheetState: SheetState,
     aIAssistantBottomSheetViewState: AIAssistantBottomSheetViewState,
     onDismiss: () -> Unit,
-    sendMessageClicked: (String) -> Unit
+    sendMessageClicked: (String) -> Unit,
+    analyticsManager: AnalyticsManager
 ) {
     var userInput by remember { mutableStateOf("") }
     val chatMessages = aIAssistantBottomSheetViewState.aiAssistantChatUiModel
+    
+    // Track AI Assistant bottom sheet view
+    analyticsManager.TrackScreenView(
+        screenName = AnalyticsScreens.AI_ASSISTANT_BOTTOM_SHEET,
+        additionalProperties = mapOf(
+            "conversation_messages_count" to (chatMessages?.size ?: 0),
+            "is_loading" to aIAssistantBottomSheetViewState.loading
+        )
+    )
 
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            analyticsManager.logEvent(
+                com.sgupta.analytics.builder.AnalyticsEventBuilder()
+                    .setScreenName(AnalyticsScreens.AI_ASSISTANT_BOTTOM_SHEET)
+                    .setEventType(com.sgupta.analytics.model.EventType.CUSTOM)
+                    .setEventName(AnalyticsEvents.AI_ASSISTANT_CLOSED)
+                    .addParameter("dismiss_method", "gesture")
+            )
+            onDismiss()
+        },
         sheetState = sheetState,
         containerColor = Color.White,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -113,6 +137,15 @@ fun AIAssistantBottomSheet(
                 IconButton(
                     onClick = {
                         if (userInput.isNotBlank()) {
+                            analyticsManager.logButtonClick(
+                                screenName = AnalyticsScreens.AI_ASSISTANT_BOTTOM_SHEET,
+                                buttonName = "send_message",
+                                buttonType = "icon_button",
+                                additionalProperties = mapOf(
+                                    "message_length" to userInput.length,
+                                    "conversation_turn" to (chatMessages?.size ?: 0)
+                                )
+                            )
                             sendMessageClicked(userInput)
                             userInput = ""
                         }

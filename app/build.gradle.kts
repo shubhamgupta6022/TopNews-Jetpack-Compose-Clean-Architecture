@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.0"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -49,7 +50,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -77,6 +78,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data:composite"))
     implementation(project(":navigation"))
+    implementation(project(":analytics"))
 
     // dagger hilt dependency
     implementation(libs.hilt.android)
@@ -91,6 +93,10 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.fragment)
 
     implementation(libs.androidx.core.splashscreen)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

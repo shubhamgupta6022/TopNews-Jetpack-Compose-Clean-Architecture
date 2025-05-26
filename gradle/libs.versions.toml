@@ -3,11 +3,13 @@ agp = "8.6.1"
 coilCompose = "2.6.0"
 converterScalars = "2.9.0"
 coreSplashscreen = "1.0.1"
-hiltAndroid = "2.51.1"
+firebaseBom = "32.7.2"
+hiltAndroid = "2.53"
 hiltLifecycleViewmodel = "1.0.0-alpha03"
 hiltNavigationCompose = "1.2.0"
 hiltNavigationFragment = "1.0.0"
 kotlin = "2.1.0"
+composeCompiler = "1.5.15"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -48,6 +50,9 @@ androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-f
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterScalars" }
+# Firebase dependencies
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

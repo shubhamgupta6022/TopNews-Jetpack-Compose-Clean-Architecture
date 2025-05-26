@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.sgupta.analytics.manager.AnalyticsManager
 import com.sgupta.navigation.destinations.NewsDestination
 import com.sgupta.navigation.destinations.Splash
 import com.sgupta.navigation.extensions.addHomeScreen
@@ -17,7 +18,8 @@ import com.sgupta.navigation.extensions.addSplashScreen
 fun NewsNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: NewsDestination = Splash
+    startDestination: NewsDestination = Splash,
+    analyticsManager: AnalyticsManager
 ) {
     NavHost(
         modifier = modifier,
@@ -25,9 +27,9 @@ fun NewsNavHost(
         startDestination = startDestination.route
     ) {
         addSplashScreen(navController)
-        addHomeScreen(navController)
-        addListingScreen(navController)
-        addSearchScreen(navController)
+        addHomeScreen(navController, analyticsManager)
+        addListingScreen(navController, analyticsManager)
+        addSearchScreen(navController, analyticsManager)
         addNewsDetailScreen(navController)
     }
 }

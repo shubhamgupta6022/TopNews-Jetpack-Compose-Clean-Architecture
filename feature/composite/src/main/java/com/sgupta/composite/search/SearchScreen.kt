@@ -17,11 +17,20 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sgupta.analytics.constants.AnalyticsProperties
+import com.sgupta.analytics.constants.AnalyticsScreens
+import com.sgupta.analytics.extensions.TrackScreenView
+import com.sgupta.analytics.extensions.logButtonClick
+import com.sgupta.analytics.extensions.logError
+import com.sgupta.analytics.extensions.logNewsArticleClick
+import com.sgupta.analytics.extensions.logSearchQuery
+import com.sgupta.analytics.manager.AnalyticsManager
+import com.sgupta.analytics.manager.MockAnalyticsManager
 import com.sgupta.composite.home.components.ArticleListItem
 import com.sgupta.composite.search.events.SearchScreenEvents
 import com.sgupta.composite.search.states.SearchScreenViewState
-import com.sgupta.core.components.toolbar.common.LoadingIndicator
 import com.sgupta.core.components.toolbar.GenericToolbar
+import com.sgupta.core.components.toolbar.common.LoadingIndicator
 import com.sgupta.core.components.toolbar.model.ToolbarContent
 import com.sgupta.core.components.toolbar.utils.ToolbarDefaults
 
@@ -29,10 +38,22 @@ import com.sgupta.core.components.toolbar.utils.ToolbarDefaults
 fun SearchScreen(
     state: SearchScreenViewState,
     onBackClick: () -> Unit,
-    onEvent: (SearchScreenEvents) -> Unit
+    onEvent: (SearchScreenEvents) -> Unit,
+    analyticsManager: AnalyticsManager
 ) {
     val articleModel = state.newsUiModel
     val focusRequester = remember { FocusRequester() }
+    
+    // Track search screen view
+    analyticsManager.TrackScreenView(
+        screenName = AnalyticsScreens.SEARCH_SCREEN,
+        additionalProperties = mapOf(
+            AnalyticsProperties.FEATURE_NAME to "news_search",
+            "has_search_results" to (articleModel?.isNotEmpty() == true),
+            "results_count" to (articleModel?.size ?: 0)
+        )
+    )
+    
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -44,12 +65,24 @@ fun SearchScreen(
     ) {
         GenericToolbar(
             navigationIcon = ToolbarDefaults.backButton {
+                analyticsManager.logButtonClick(
+                    screenName = AnalyticsScreens.SEARCH_SCREEN,
+                    buttonName = "back_button",
+                    buttonType = "navigation"
+                )
                 onBackClick()
             },
             content = ToolbarContent.SearchBar(
                 placeholder = "Search News...",
-                onSearch = {
-                    onEvent(SearchScreenEvents.SearchQuery(query = it))
+                onSearch = { query ->
+                    if (query.isNotBlank()) {
+                        analyticsManager.logSearchQuery(
+                            screenName = AnalyticsScreens.SEARCH_SCREEN,
+                            query = query,
+                            resultsCount = articleModel?.size
+                        )
+                    }
+                    onEvent(SearchScreenEvents.SearchQuery(query = query))
                 },
                 focusRequester = focusRequester
             )
@@ -62,9 +95,21 @@ fun SearchScreen(
                             items(
                                 articleModel,
                                 key = { it.title.orEmpty() }) { item ->
-                                ArticleListItem(item) {
-                                    onEvent(SearchScreenEvents.NewsItemClicked(item.title.orEmpty(), item.url.orEmpty()))
-                                }
+                                ArticleListItem(
+                                    articleDataModel = item,
+                                    onItemClick = { event ->
+                                        // Log search result click
+                                        analyticsManager.logNewsArticleClick(
+                                            screenName = AnalyticsScreens.SEARCH_SCREEN,
+                                            title = item.title.orEmpty(),
+                                            url = item.url.orEmpty(),
+                                            source = item.source?.name,
+                                            category = "search_result",
+                                            position = articleModel.indexOf(item)
+                                        )
+                                        onEvent(SearchScreenEvents.NewsItemClicked(item.title.orEmpty(), item.url.orEmpty()))
+                                    }
+                                )
                             }
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -76,6 +121,12 @@ fun SearchScreen(
                 }
 
                 state.error != null -> {
+                    // Log search error
+                    analyticsManager.logError(
+                        screenName = AnalyticsScreens.SEARCH_SCREEN,
+                        errorType = "search_error",
+                        errorMessage = state.error.message ?: "Unknown search error"
+                    )
                     Text("Error: ${state.error.message}")
                 }
 
@@ -90,5 +141,5 @@ fun SearchScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SearchScreenPreview() {
-    SearchScreen(state = SearchScreenViewState(), onBackClick = {}, onEvent = {})
+    SearchScreen(state = SearchScreenViewState(), onBackClick = {}, onEvent = {}, analyticsManager = MockAnalyticsManager())
 }

@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.sgupta.composite"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
