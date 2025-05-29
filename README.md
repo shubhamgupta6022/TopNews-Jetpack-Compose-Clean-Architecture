@@ -1,1 +1,1 @@
-# News-Android-App---Jetpack-Compose-Multi-Module-Clean-Architecture
+# TopNews | Jetpack Compose | Clean Architecture
