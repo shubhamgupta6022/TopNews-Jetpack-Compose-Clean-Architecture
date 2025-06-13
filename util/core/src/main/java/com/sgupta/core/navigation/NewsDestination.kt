@@ -1,4 +1,4 @@
-package com.sgupta.navigation.destinations
+package com.sgupta.core.navigation
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
@@ -6,7 +6,7 @@ import androidx.navigation.NavDeepLink
 /**
  * Sealed interface that defines all possible navigation destinations
  */
-sealed interface NewsDestination {
+interface NewsDestination {
     /**
      * The route string used for navigation
      */

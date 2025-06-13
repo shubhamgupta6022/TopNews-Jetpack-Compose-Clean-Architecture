@@ -59,9 +59,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
 
-    implementation(project(":feature:composite"))
-    implementation(project(":feature:core"))
-    implementation(project(":analytics"))
+    implementation(project(":util:core"))
 
     // dagger hilt dependency
     implementation(libs.hilt.android)
@@ -79,7 +77,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.fragment)
 
     // Type-safe navigation
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.gson)
 }

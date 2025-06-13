@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":util:core"))
     implementation(project(":analytics"))
+    implementation(project(":navigation"))
 
     // dagger hilt dependency
     implementation(libs.hilt.android)

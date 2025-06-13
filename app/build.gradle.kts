@@ -75,10 +75,12 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(project(":feature:composite"))
+    implementation(project(":feature:core"))
     implementation(project(":domain"))
     implementation(project(":data:composite"))
     implementation(project(":navigation"))
     implementation(project(":analytics"))
+    implementation(project(":util:core"))
 
     // dagger hilt dependency
     implementation(libs.hilt.android)

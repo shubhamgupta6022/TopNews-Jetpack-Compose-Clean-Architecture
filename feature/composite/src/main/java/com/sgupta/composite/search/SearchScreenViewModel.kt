@@ -1,14 +1,13 @@
 package com.sgupta.composite.search
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sgupta.composite.search.events.SearchScreenEvents
 import com.sgupta.composite.search.states.SearchScreenViewState
+import com.sgupta.core.navigation.NavigationService
 import com.sgupta.core.network.Resource
+import com.sgupta.core.presentation.StateAndEventViewModel
 import com.sgupta.domain.usecase.GetNewsSearchQueryUseCase
+import com.sgupta.navigation.destinations.NewsDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -19,26 +18,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor(
-    private val getNewsSearchQueryUseCase: GetNewsSearchQueryUseCase
-) : ViewModel() {
-
-    var states by mutableStateOf(SearchScreenViewState())
-        private set
+    private val getNewsSearchQueryUseCase: GetNewsSearchQueryUseCase,
+    private val navigator: NavigationService
+) : StateAndEventViewModel<SearchScreenViewState, SearchScreenEvents>(SearchScreenViewState()) {
 
     private val _searchQuery = MutableStateFlow("")
     private val SEARCH_DEBOUNCE_DELAY = 300L
 
-    init {
-        observeSearchQuery()
-    }
-
-    fun onEvent(event: SearchScreenEvents) {
+    override suspend fun handleEvent(event: SearchScreenEvents) {
         when (event) {
             is SearchScreenEvents.SearchQuery -> {
                 _searchQuery.value = event.query
             }
-            else -> {}
+
+            SearchScreenEvents.BackClicked -> {
+                navigator.goBack()
+            }
+            is SearchScreenEvents.NewsItemClicked -> {
+                navigator.navigateTo(
+                    destination = NewsDetail(event.title, event.url)
+                )
+            }
         }
+    }
+
+    init {
+        observeSearchQuery()
     }
 
     private fun observeSearchQuery() {
@@ -59,21 +64,27 @@ class SearchScreenViewModel @Inject constructor(
             .collect {
                 when (it) {
                     is Resource.Loading -> {
-                        states = states.copy(loading = true)
+                        updateUiState {
+                            copy(loading = true)
+                        }
                     }
 
                     is Resource.Success -> {
-                        states = states.copy(
-                            loading = false,
-                            newsUiModel = it.data?.articles.orEmpty()
-                        )
+                        updateUiState {
+                            copy(
+                                loading = false,
+                                newsUiModel = it.data?.articles.orEmpty()
+                            )
+                        }
                     }
 
                     is Resource.Error -> {
-                        states = states.copy(
-                            loading = false,
-                            error = it.error
-                        )
+                        updateUiState {
+                            copy(
+                                loading = false,
+                                error = it.error
+                            )
+                        }
                     }
 
                     else -> {}

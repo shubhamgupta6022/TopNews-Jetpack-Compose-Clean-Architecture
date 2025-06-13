@@ -15,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,12 +54,12 @@ import com.sgupta.core.components.toolbar.common.SectionHeadline
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsHomeScreen(
-    state: HomeScreenViewState,
-    aIAssistantBottomSheetViewState: AIAssistantBottomSheetViewState,
-    onEvent: (ViewEvent) -> Unit,
     analyticsManager: AnalyticsManager
 ) {
-    val newsUiModel = state.newsUiModel
+    val viewModel: HomeScreenViewModel = hiltViewModel()
+    val state = viewModel.uiState.collectAsState()
+    val aIAssistantBottomSheetViewState = viewModel.aiAssistantBottomSheetStates
+    val newsUiModel = state.value.newsUiModel
     val sheetState = rememberModalBottomSheetState()
     var showSheet by remember { mutableStateOf(false) }
 
@@ -97,7 +98,7 @@ fun NewsHomeScreen(
                                             buttonName = "search_bar",
                                             buttonType = "navigation"
                                         )
-                                        onEvent(HomeScreenEvents.SearchBarClicked)
+                                        viewModel.onEvent(HomeScreenEvents.SearchBarClicked)
                                     }
                             )
                         }
@@ -120,7 +121,7 @@ fun NewsHomeScreen(
                                             category = "top_headlines",
                                             position = newsUiModel.topNewsItemsList.indexOf(item)
                                         )
-                                        onEvent(event)
+                                        viewModel.onEvent(event)
                                     }
                                 )
                             }
@@ -142,7 +143,7 @@ fun NewsHomeScreen(
                                                 .addParameter(AnalyticsProperties.NEWS_CATEGORY, category.categoryType.id)
                                                 .addParameter(AnalyticsProperties.LIST_POSITION, newsUiModel.categoriesItemsList.indexOf(category))
                                         )
-                                        onEvent(event)
+                                        viewModel.onEvent(event)
                                     }
                                 )
                             }
@@ -162,7 +163,7 @@ fun NewsHomeScreen(
                                                 .addParameter(AnalyticsProperties.NEWS_COUNTRY, country.id)
                                                 .addParameter(AnalyticsProperties.LIST_POSITION, newsUiModel.countriesItemsList.indexOf(country))
                                         )
-                                        onEvent(event)
+                                        viewModel.onEvent(event)
                                     }
                                 )
                             }
@@ -172,18 +173,18 @@ fun NewsHomeScreen(
                     }
                 }
 
-                state.loading -> {
+                state.value.loading -> {
                     LoadingIndicator()
                 }
 
-                state.error != null -> {
+                state.value.error != null -> {
                     // Log error occurrence
                     analyticsManager.logError(
                         screenName = AnalyticsScreens.HOME_SCREEN,
                         errorType = "api_error",
-                        errorMessage = state.error.message ?: "Unknown error"
+                        errorMessage = state.value.error?.message ?: "Unknown error"
                     )
-                    Text("Error: ${state.error.message}")
+                    Text("Error: ${state.value.error?.message}")
                 }
 
                 else -> {
@@ -221,7 +222,7 @@ fun NewsHomeScreen(
                             messageLength = message.length,
                             conversationTurn = aIAssistantBottomSheetViewState.aiAssistantChatUiModel?.size ?: 0
                         )
-                        onEvent(HomeScreenEvents.GenerateAiContent(message))
+                        viewModel.onEvent(HomeScreenEvents.GenerateAiContent(message))
                     },
                     analyticsManager = analyticsManager
                 )
@@ -235,9 +236,6 @@ fun NewsHomeScreen(
 @Preview(showBackground = true, showSystemUi = true)
 private fun NewsHomeScreenPreview() {
     NewsHomeScreen(
-        state = HomeScreenViewState(newsUiModel = HomeNewsUiModel()),
-        aIAssistantBottomSheetViewState = AIAssistantBottomSheetViewState(aiAssistantChatUiModel = emptyList()),
-        onEvent = {},
         analyticsManager = MockAnalyticsManager()
     )
 }

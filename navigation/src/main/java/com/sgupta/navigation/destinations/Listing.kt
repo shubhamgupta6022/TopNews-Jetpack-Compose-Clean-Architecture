@@ -4,6 +4,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.sgupta.core.navigation.NewsDestination
 
 /**
  * The news listing screen destination
