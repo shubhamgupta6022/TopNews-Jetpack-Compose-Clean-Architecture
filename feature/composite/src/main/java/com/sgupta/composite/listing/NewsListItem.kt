@@ -6,8 +6,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sgupta.analytics.constants.AnalyticsEvents
 import com.sgupta.analytics.constants.AnalyticsProperties
 import com.sgupta.analytics.constants.AnalyticsScreens
@@ -21,15 +22,35 @@ import com.sgupta.core.components.toolbar.GenericToolbar
 import com.sgupta.core.components.toolbar.common.LoadingIndicator
 import com.sgupta.core.components.toolbar.model.ToolbarContent
 import com.sgupta.core.components.toolbar.utils.ToolbarDefaults
-import com.sgupta.domain.model.NewsDataModel
+import com.sgupta.navigation.Navigator
 
 @Composable
 fun NewsList(
-    onBackClick: () -> Unit,
-    title: String,
-    newsPagingItems: LazyPagingItems<NewsDataModel>?,
-    analyticsManager: AnalyticsManager
+    country: String?,
+    category: String?,
+    analyticsManager: AnalyticsManager,
+    navigator: Navigator
 ) {
+    val title = when {
+        country?.isNotEmpty() == true -> when (country) {
+            "in" -> "India"
+            "us" -> "USA"
+            "uk" -> "UK"
+            else -> "Country News"
+        }
+
+        category?.isNotEmpty() == true -> category
+        else -> "News"
+    }
+    val viewModel =
+        hiltViewModel<NewsListViewModel, NewsListViewModel.NewsListViewModelFactory> { factory ->
+            factory.create(country, category)
+        }
+    val newsPagingItems = if (country?.isNotEmpty() == true) {
+        viewModel.countryStates?.collectAsLazyPagingItems()
+    } else {
+        viewModel.categoryState?.collectAsLazyPagingItems()
+    }
     // Track news list screen view
     analyticsManager.TrackScreenView(
         screenName = AnalyticsScreens.NEWS_LIST_SCREEN,
@@ -40,7 +61,7 @@ fun NewsList(
             "loading_state" to (newsPagingItems?.loadState?.refresh is LoadState.Loading)
         )
     )
-    
+
     Column {
         GenericToolbar(
             navigationIcon = ToolbarDefaults.backButton {
@@ -52,7 +73,7 @@ fun NewsList(
                         "list_title" to title
                     )
                 )
-                onBackClick()
+                navigator.goBack()
             },
             content = ToolbarContent.Title(title)
         )
@@ -76,11 +97,11 @@ fun NewsList(
                                         screenName = AnalyticsScreens.NEWS_LIST_SCREEN,
                                         title = article.title.orEmpty(),
                                         url = article.url.orEmpty(),
-                                        source = article.source?.name,
+                                        source = article.source.name,
                                         category = title,
                                         position = index
                                     )
-                                    
+
                                     // Log pagination if near end
                                     if (index >= newsPagingItems.itemCount - 5) {
                                         analyticsManager.logEvent(
@@ -88,7 +109,10 @@ fun NewsList(
                                                 .setScreenName(AnalyticsScreens.NEWS_LIST_SCREEN)
                                                 .setEventType(com.sgupta.analytics.model.EventType.CUSTOM)
                                                 .setEventName(AnalyticsEvents.PAGINATION_TRIGGERED)
-                                                .addParameter(AnalyticsProperties.PAGE_NUMBER, (index / 20) + 1)
+                                                .addParameter(
+                                                    AnalyticsProperties.PAGE_NUMBER,
+                                                    (index / 20) + 1
+                                                )
                                                 .addParameter("trigger_position", index)
                                         )
                                     }
@@ -137,6 +161,7 @@ fun NewsList(
                             }
                         }
                     }
+
                     is LoadState.Error -> {
                         val error = newsPagingItems.loadState.refresh as LoadState.Error
                         if (newsPagingItems.itemCount == 0) {  // Only show if no items
@@ -153,6 +178,7 @@ fun NewsList(
                             }
                         }
                     }
+
                     else -> {}
                 }
             }

@@ -56,7 +56,7 @@ private fun CategoriesSection() {
 }
 
 @Composable
-fun CategoriesSectionItem(category: CategoriesUiModel, onEvent: (ViewEvent) -> Unit) {
+fun CategoriesSectionItem(category: CategoriesUiModel, onEvent: (HomeScreenEvents) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -80,7 +80,7 @@ fun CategoriesSectionItem(category: CategoriesUiModel, onEvent: (ViewEvent) -> U
 @Composable
 fun CategoryItem(
     category: CategoriesUiModel,
-    onEvent: (ViewEvent) -> Unit
+    onEvent: (HomeScreenEvents) -> Unit
 ) {
     Row(
         modifier = Modifier

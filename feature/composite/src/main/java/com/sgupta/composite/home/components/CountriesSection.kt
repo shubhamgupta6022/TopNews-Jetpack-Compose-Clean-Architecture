@@ -48,7 +48,7 @@ private fun CountriesSection() {
 }
 
 @Composable
-fun CountriesSectionItem(countriesUiModel: CountriesUiModel, onEvent: (ViewEvent) -> Unit) {
+fun CountriesSectionItem(countriesUiModel: CountriesUiModel, onEvent: (HomeScreenEvents) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,7 +76,7 @@ fun CountriesSectionItem(countriesUiModel: CountriesUiModel, onEvent: (ViewEvent
 @Composable
 fun CountriesItem(
     countriesUiModel: CountriesUiModel,
-    onEvent: (ViewEvent) -> Unit
+    onEvent: (HomeScreenEvents) -> Unit
 ) {
     Row(
         modifier = Modifier

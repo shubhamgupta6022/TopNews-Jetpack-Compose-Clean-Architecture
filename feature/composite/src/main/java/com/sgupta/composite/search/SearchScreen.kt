@@ -11,12 +11,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sgupta.analytics.constants.AnalyticsProperties
 import com.sgupta.analytics.constants.AnalyticsScreens
 import com.sgupta.analytics.extensions.TrackScreenView
@@ -28,7 +30,6 @@ import com.sgupta.analytics.manager.AnalyticsManager
 import com.sgupta.analytics.manager.MockAnalyticsManager
 import com.sgupta.composite.home.components.ArticleListItem
 import com.sgupta.composite.search.events.SearchScreenEvents
-import com.sgupta.composite.search.states.SearchScreenViewState
 import com.sgupta.core.components.toolbar.GenericToolbar
 import com.sgupta.core.components.toolbar.common.LoadingIndicator
 import com.sgupta.core.components.toolbar.model.ToolbarContent
@@ -36,12 +37,11 @@ import com.sgupta.core.components.toolbar.utils.ToolbarDefaults
 
 @Composable
 fun SearchScreen(
-    state: SearchScreenViewState,
-    onBackClick: () -> Unit,
-    onEvent: (SearchScreenEvents) -> Unit,
     analyticsManager: AnalyticsManager
 ) {
-    val articleModel = state.newsUiModel
+    val viewModel: SearchScreenViewModel = hiltViewModel()
+    val state = viewModel.uiState.collectAsState()
+    val articleModel = state.value.newsUiModel
     val focusRequester = remember { FocusRequester() }
     
     // Track search screen view
@@ -70,7 +70,7 @@ fun SearchScreen(
                     buttonName = "back_button",
                     buttonType = "navigation"
                 )
-                onBackClick()
+                viewModel.onEvent(SearchScreenEvents.BackClicked)
             },
             content = ToolbarContent.SearchBar(
                 placeholder = "Search News...",
@@ -82,7 +82,7 @@ fun SearchScreen(
                             resultsCount = articleModel?.size
                         )
                     }
-                    onEvent(SearchScreenEvents.SearchQuery(query = query))
+                    viewModel.onEvent(SearchScreenEvents.SearchQuery(query = query))
                 },
                 focusRequester = focusRequester
             )
@@ -107,7 +107,7 @@ fun SearchScreen(
                                             category = "search_result",
                                             position = articleModel.indexOf(item)
                                         )
-                                        onEvent(SearchScreenEvents.NewsItemClicked(item.title.orEmpty(), item.url.orEmpty()))
+                                        viewModel.onEvent(SearchScreenEvents.NewsItemClicked(item.title.orEmpty(), item.url.orEmpty()))
                                     }
                                 )
                             }
@@ -116,18 +116,18 @@ fun SearchScreen(
                     }
                 }
 
-                state.loading -> {
+                state.value.loading -> {
                     LoadingIndicator()
                 }
 
-                state.error != null -> {
+                state.value.error != null -> {
                     // Log search error
                     analyticsManager.logError(
                         screenName = AnalyticsScreens.SEARCH_SCREEN,
                         errorType = "search_error",
-                        errorMessage = state.error.message ?: "Unknown search error"
+                        errorMessage = state.value.error?.message ?: "Unknown search error"
                     )
-                    Text("Error: ${state.error.message}")
+                    Text("Error: ${state.value.error?.message}")
                 }
 
                 else -> {
@@ -141,5 +141,5 @@ fun SearchScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SearchScreenPreview() {
-    SearchScreen(state = SearchScreenViewState(), onBackClick = {}, onEvent = {}, analyticsManager = MockAnalyticsManager())
+    SearchScreen(analyticsManager = MockAnalyticsManager())
 }

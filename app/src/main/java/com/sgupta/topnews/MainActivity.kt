@@ -4,7 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.sgupta.analytics.manager.AnalyticsManager
-import com.sgupta.navigation.NewsNavHost
+import com.sgupta.composite.home.NewsHomeScreen
+import com.sgupta.composite.listing.NewsList
+import com.sgupta.composite.newsdetail.NewsDetailScreen
+import com.sgupta.composite.search.SearchScreen
+import com.sgupta.composite.splash.SplashScreen
+import com.sgupta.core.theme.NewsAppTheme
+import com.sgupta.navigation.Navigator
+import com.sgupta.navigation.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -12,12 +19,47 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
+    lateinit var navigator: Navigator
+
+    @Inject
     lateinit var analyticsManager: AnalyticsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NewsNavHost(analyticsManager = analyticsManager)
+            NewsAppTheme {
+                AppNavigation(
+                    navigator = navigator,
+                    splashScreen = {
+                        SplashScreen()
+                    },
+                    homeScreen = {
+                        NewsHomeScreen(
+                            analyticsManager = analyticsManager
+                        )
+                    },
+                    listScreen = { country, category ->
+                        NewsList(
+                            country = country,
+                            category = category,
+                            analyticsManager = analyticsManager,
+                            navigator = navigator
+                        )
+                    },
+                    searchScreen = {
+                        SearchScreen(
+                            analyticsManager = analyticsManager
+                        )
+                    },
+                    detailScreen = { title, url ->
+                        NewsDetailScreen(
+                            title = title,
+                            url = url,
+                            navigator
+                        )
+                    },
+                )
+            }
         }
     }
 }

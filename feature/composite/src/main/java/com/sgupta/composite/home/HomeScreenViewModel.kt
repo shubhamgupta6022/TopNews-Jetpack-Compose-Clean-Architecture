@@ -10,11 +10,18 @@ import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
 import com.sgupta.composite.home.events.HomeScreenEvents
 import com.sgupta.composite.home.model.HomeNewsUiModel
 import com.sgupta.composite.home.states.HomeScreenViewState
+import com.sgupta.composite.splash.event.SplashScreenEvent
+import com.sgupta.composite.splash.state.SplashScreenUIState
+import com.sgupta.core.navigation.NavigationService
 import com.sgupta.core.network.Resource
+import com.sgupta.core.presentation.StateAndEventViewModel
 import com.sgupta.core.state.ViewEvent
 import com.sgupta.domain.model.ArticleDataModel
 import com.sgupta.domain.usecase.GenerateAIAssistantContentUseCase
 import com.sgupta.domain.usecase.GetTopNewsUseCase
+import com.sgupta.navigation.destinations.Listing
+import com.sgupta.navigation.destinations.NewsDetail
+import com.sgupta.navigation.destinations.Search
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,10 +34,10 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val getTopNewsUseCase: GetTopNewsUseCase,
-    private val generateAIAssistantContentUseCase: GenerateAIAssistantContentUseCase
-) : ViewModel() {
+    private val generateAIAssistantContentUseCase: GenerateAIAssistantContentUseCase,
+    private val navigator: NavigationService
+) : StateAndEventViewModel<HomeScreenViewState, HomeScreenEvents>(HomeScreenViewState()) {
 
-    var states by mutableStateOf(HomeScreenViewState())
     private var aiAssistantChatUiModel = mutableListOf(
         AIAssistantChatUiModel(isUser = false, message = "How can I help you?"),
     )
@@ -41,7 +48,6 @@ class HomeScreenViewModel @Inject constructor(
     )
     private var topHeadlinesJob: Job? = null
     private var otherTopHeadlinesJob: Job? = null
-    private var newsUiModel: HomeNewsUiModel? = null
     private var topNewsItemsList: List<ArticleDataModel>? = null
     private var articlesItemsList: List<ArticleDataModel>? = null
 
@@ -52,17 +58,19 @@ class HomeScreenViewModel @Inject constructor(
     private fun getTopNews() {
         topHeadlinesJob?.cancel()
         otherTopHeadlinesJob?.cancel()
-        states = states.copy(loading = true)
+        updateUiState { copy(loading = true) }
         topHeadlinesJob = topHeadLinesJob()
         otherTopHeadlinesJob = otherTopHeadLines()
         viewModelScope.launch {
             topHeadlinesJob?.join()
             otherTopHeadlinesJob?.join()
-            newsUiModel = HomeNewsUiModel().copy(
+            val newsUiModel = HomeNewsUiModel().copy(
                 topNewsItemsList = topNewsItemsList.orEmpty(),
                 articlesItemsList = articlesItemsList.orEmpty()
             )
-            states = states.copy(loading = false, newsUiModel = newsUiModel)
+            updateUiState {
+                copy(loading = false, newsUiModel = newsUiModel)
+            }
         }
     }
 
@@ -94,13 +102,35 @@ class HomeScreenViewModel @Inject constructor(
             .flowOn(Dispatchers.IO)
             .launchIn(viewModelScope)
 
-    fun onEvent(event: ViewEvent) {
+    override suspend fun handleEvent(event: HomeScreenEvents) {
         when(event) {
             is HomeScreenEvents.GenerateAiContent -> {
                 generateAiAssistantContent(event.prompt)
             }
+            is HomeScreenEvents.CountriesViewAllClicked -> {
+                navigator.navigateTo(
+                    Listing(country = event.id)
+                )
+            }
 
-            else -> {}
+            is HomeScreenEvents.CategoryFilterClicked -> {
+                navigator.navigateTo(
+                    Listing(category = event.category)
+                )
+            }
+
+            is HomeScreenEvents.SearchBarClicked -> {
+                navigator.navigateTo(Search)
+            }
+
+            is HomeScreenEvents.NewsItemClicked -> {
+                navigator.navigateTo(
+                    NewsDetail(
+                        title = event.title,
+                        url = event.url
+                    )
+                )
+            }
         }
     }
 

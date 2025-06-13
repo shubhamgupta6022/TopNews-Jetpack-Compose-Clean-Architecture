@@ -17,12 +17,13 @@ import com.sgupta.core.components.toolbar.model.ToolbarContent
 import com.sgupta.core.components.toolbar.utils.ToolbarDefaults
 import com.sgupta.core.components.webview.GenericWebView
 import com.sgupta.core.components.webview.WebViewCallbacks
+import com.sgupta.navigation.Navigator
 
 @Composable
 fun NewsDetailScreen(
-    onBackClick: () -> Unit,
     title: String,
-    url: String
+    url: String,
+    navigator: Navigator
 ) {
     var isLoading by remember { mutableStateOf(true) }
 
@@ -30,7 +31,7 @@ fun NewsDetailScreen(
         GenericToolbar(
             modifier = Modifier.fillMaxWidth(),
             navigationIcon = ToolbarDefaults.backButton {
-                onBackClick()
+                navigator.goBack()
             },
             content = ToolbarContent.Title(title)
         )
@@ -64,5 +65,5 @@ fun NewsDetailScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun NewsDetailScreenPreview() {
-    NewsDetailScreen(onBackClick = {}, "News Detail", "")
+    NewsDetailScreen("News Detail", "", navigator = Navigator())
 }
