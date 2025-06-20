@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.sgupta.navigation.destinations.Home
 import com.sgupta.navigation.destinations.Listing
 import com.sgupta.navigation.destinations.NewsDetail
+import com.sgupta.navigation.destinations.Reels
 import com.sgupta.navigation.destinations.Search
 import com.sgupta.navigation.destinations.Splash
 
@@ -76,5 +77,18 @@ internal fun NavGraphBuilder.addNewsDetailScreen(
     ) { backStackEntry ->
         val destination = remember { NewsDetail.fromNavBackStackEntry(backStackEntry) }
         detailScreen(destination.title.orEmpty(), destination.url.orEmpty())
+    }
+}
+
+/**
+ * Add news detail screen to navigation graph
+ */
+internal fun NavGraphBuilder.addReelsScreen(
+    reelsScreen: @Composable () -> Unit
+) {
+    composable(
+        route = Reels.route,
+    ) {
+        reelsScreen()
     }
 }

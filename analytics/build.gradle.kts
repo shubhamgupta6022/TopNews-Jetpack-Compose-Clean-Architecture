@@ -63,8 +63,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-analytics:18.0.4")
     
     // Coroutines for async operations
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
