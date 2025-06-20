@@ -1,6 +1,6 @@
-package com.example.media
+package com.example.media.di
 
-import com.example.media.manager.MediaPlayerManager
+import com.example.media.domain.MediaPlayerManager
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent

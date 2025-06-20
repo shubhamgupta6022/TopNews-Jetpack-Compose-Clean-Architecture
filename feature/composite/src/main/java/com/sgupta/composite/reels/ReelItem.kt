@@ -1,5 +1,6 @@
 package com.sgupta.composite.reels
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +44,7 @@ fun ReelItem(
     onLikeClick: () -> Unit  = {},
     onCommentClick: () -> Unit  = {},
     onShareClick: () -> Unit  = {},
-    modifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier

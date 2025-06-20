@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.media.MediaPlayerManagerEntryPoint
+import com.example.media.di.MediaPlayerManagerEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 
 @Composable
@@ -60,8 +60,8 @@ fun ReelsScreen(
     // Dispose player when leaving screen
     DisposableEffect(Unit) {
         onDispose {
-            mediaPlayerManager.pauseVideo()
-            mediaPlayerManager.releasePlayer()
+            mediaPlayerManager.pause()
+            mediaPlayerManager.release()
         }
     }
 

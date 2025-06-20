@@ -3,7 +3,7 @@ package com.sgupta.composite.reels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.example.media.manager.MediaPlayerManager
+import com.example.media.domain.MediaPlayerManager
 import com.sgupta.domain.model.ReelVideo
 import com.sgupta.domain.usecase.GetReelsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,16 +31,18 @@ class ReelsViewModel @Inject constructor(
     fun playVideo(video: ReelVideo, index: Int) {
         if (currentVideoId != video.id) {
             currentVideoId = video.id
-            mediaPlayerManager.playVideo(video.videoUrl)
+            viewModelScope.launch {
+                mediaPlayerManager.playMedia(video.videoUrl)
+            }
             _uiState.update { it.copy(currentVideoIndex = index, isPlaying = true) }
         } else if (!mediaPlayerManager.isPlaying()) {
-            mediaPlayerManager.playVideo()
+            mediaPlayerManager.play()
             _uiState.update { it.copy(isPlaying = true) }
         }
     }
 
     fun pauseVideo() {
-        mediaPlayerManager.pauseVideo()
+        mediaPlayerManager.pause()
         _uiState.update { it.copy(isPlaying = false) }
     }
 
@@ -70,6 +72,6 @@ class ReelsViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        mediaPlayerManager.releasePlayer()
+        mediaPlayerManager.release()
     }
 }

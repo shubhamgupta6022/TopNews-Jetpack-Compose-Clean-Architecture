@@ -140,6 +140,45 @@ class ReelsPagingSource @Inject constructor() : PagingSource<Int, ReelVideo>() {
             comments = 1567,
             shares = 234,
             category = "Education"
+        ),
+        ReelVideoDataModel(
+            id = "11",
+            title = "Nature in 4K (HLS)",
+            description = "Relaxing scenes of nature and wildlife in ultra HD",
+            videoUrl = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+            thumbnailUrl = "https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217",
+            duration = 888000,
+            author = "Nature Vibes",
+            likes = 34890,
+            comments = 1024,
+            shares = 642,
+            category = "Nature"
+        ),
+        ReelVideoDataModel(
+            id = "12",
+            title = "Big Buck Bunny (HLS)",
+            description = "The famous open-source animated short",
+            videoUrl = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+            thumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg",
+            duration = 596000,
+            author = "Open Animations",
+            likes = 26780,
+            comments = 1356,
+            shares = 487,
+            category = "Animation"
+        ),
+        ReelVideoDataModel(
+            id = "13",
+            title = "Live Stream Simulation (HLS)",
+            description = "Simulated live HLS stream for testing purposes",
+            videoUrl = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
+            thumbnailUrl = "https://mango.blender.org/wp-content/uploads/2013/05/ToS_poster_comp_final_web.jpg",
+            duration = 734000,
+            author = "Stream Sim",
+            likes = 19890,
+            comments = 1357,
+            shares = 354,
+            category = "Live"
         )
     )
 
