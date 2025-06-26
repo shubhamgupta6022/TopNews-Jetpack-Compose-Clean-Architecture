@@ -3,6 +3,7 @@ package com.sgupta.composite.bottombarnavigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -26,8 +27,8 @@ val navigationItems = listOf(
         route = Home
     ),
     NavigationItem(
-        title = "Profile",
-        icon = Icons.Default.Person,
+        title = "Reels",
+        icon = Icons.Default.ShoppingCart,
         route = Reels
     )
 )
