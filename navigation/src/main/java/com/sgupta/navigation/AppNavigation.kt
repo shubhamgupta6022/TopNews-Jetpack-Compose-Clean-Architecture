@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sgupta.core.navigation.NewsDestination
 import com.sgupta.navigation.destinations.Home
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun AppNavigation(
     navigator: Navigator,
     modifier: Modifier = Modifier,
+    bottomBarRoutes: List<String>,
     startDestination: NewsDestination = Home,
     bottomNavigationBar: @Composable () -> Unit,
     splashScreen: @Composable () -> Unit,
@@ -34,6 +37,9 @@ fun AppNavigation(
     reelsScreen: @Composable () -> Unit
 ) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     LaunchedEffect(Unit) {
         navigator.actions.collectLatest { action ->
             when (action) {
@@ -55,7 +61,11 @@ fun AppNavigation(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        bottomBar = bottomNavigationBar
+        bottomBar = {
+            if (currentRoute in bottomBarRoutes) {
+                bottomNavigationBar()
+            }
+        }
     ) { innerPadding ->
         NavHost(
             modifier = modifier.padding(innerPadding),

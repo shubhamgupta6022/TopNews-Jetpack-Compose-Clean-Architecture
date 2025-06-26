@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.sgupta.analytics.manager.AnalyticsManager
 import com.sgupta.composite.bottombarnavigation.BottomNavigationBar
+import com.sgupta.composite.bottombarnavigation.getBottomBarRoutes
 import com.sgupta.composite.home.NewsHomeScreen
 import com.sgupta.composite.listing.NewsList
 import com.sgupta.composite.newsdetail.NewsDetailScreen
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
             NewsAppTheme {
                 AppNavigation(
                     navigator = navigator,
+                    bottomBarRoutes = getBottomBarRoutes(),
                     bottomNavigationBar = { BottomNavigationBar(navigator) },
                     splashScreen = { SplashScreen() },
                     homeScreen = { NewsHomeScreen(analyticsManager = analyticsManager) },
