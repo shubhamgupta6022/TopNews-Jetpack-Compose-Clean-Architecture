@@ -32,6 +32,10 @@ val navigationItems = listOf(
     )
 )
 
+fun getBottomBarRoutes(): List<String> {
+    return navigationItems.map { it.route.route }
+}
+
 @Composable
 fun BottomNavigationBar(navigator: Navigator) {
     val selectedNavigationIndex = rememberSaveable {
