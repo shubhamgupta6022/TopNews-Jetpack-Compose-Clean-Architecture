@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sgupta.composite.R
+import com.sgupta.feature.composite.R
 import com.sgupta.core.theme.typography.Typography
 import com.sgupta.core.theme.color.colorGrey500
 import com.sgupta.core.theme.color.colorPrimaryWhite

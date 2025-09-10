@@ -1,3 +1,4 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +6,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.0"
     id("com.google.gms.google-services")
+    id("com.google.firebase.appdistribution")
 }
 
 android {
@@ -60,6 +62,14 @@ android {
     kapt {
         correctErrorTypes = true
     }
+}
+
+firebaseAppDistribution {
+    appId = "1:126679528894:android:7a1f5788350880240ff5ef"
+    serviceCredentialsFile = "app/serviceCredentialFile.json"
+    artifactType = "APK"
+    releaseNotesFile = "release_notes.txt"
+    testersFile = "testers.txt"
 }
 
 dependencies {

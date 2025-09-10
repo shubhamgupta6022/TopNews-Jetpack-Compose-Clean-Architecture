@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sgupta.composite"
+    namespace = "com.sgupta.feature.composite"
     compileSdk = 35
 
     defaultConfig {

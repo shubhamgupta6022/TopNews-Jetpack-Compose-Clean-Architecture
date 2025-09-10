@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sgupta.core.R
 import com.sgupta.core.components.toolbar.model.ToolbarAction
 import com.sgupta.core.theme.color.colorGreyLightBorder
 import com.sgupta.core.theme.typography.Typography
@@ -79,7 +78,7 @@ internal fun SearchBarContent(
         ),
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_search),
+                painter = painterResource(id = com.sgupta.feature.core.R.drawable.ic_search),
                 contentDescription = "Search",
                 tint = Color.Gray,
             )
