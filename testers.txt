@@ -1,0 +1,11 @@
+# Firebase App Distribution Testers
+# Add one email per line
+# Lines starting with # are comments and will be ignored
+
+# Primary testers
+shubhamgupta6022@gmail.com
+
+# Add more testers below:
+# tester1@example.com
+# tester2@example.com
+# qa-team@example.com

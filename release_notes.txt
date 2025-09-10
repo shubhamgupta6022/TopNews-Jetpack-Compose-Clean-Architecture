@@ -1,0 +1,23 @@
+📱 TopNews App - Debug Build
+
+🔄 What's New:
+- Latest features and improvements
+- Bug fixes and performance optimizations
+- Updated dependencies
+
+🧪 Debug Build Notes:
+- This is a development build for testing purposes
+- Contains additional debugging information
+- Performance may vary from release builds
+
+🚀 Test Focus Areas:
+- Navigation between screens
+- News article loading and display
+- Search functionality
+- Overall app stability
+
+📝 Feedback:
+Please report any issues or feedback via email or internal channels.
+
+Build Version: Debug
+Build Date: $(date)

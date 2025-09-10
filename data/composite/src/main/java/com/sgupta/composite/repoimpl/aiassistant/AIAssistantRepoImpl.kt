@@ -1,6 +1,5 @@
 package com.sgupta.composite.repoimpl.aiassistant
 
-import com.sgupta.composite.BuildConfig
 import com.sgupta.composite.api.AIAssistantApiService
 import com.sgupta.composite.model.request.AIAssistantRequestBodyModel
 import com.sgupta.composite.model.request.Content
@@ -8,6 +7,7 @@ import com.sgupta.composite.model.request.Part
 import com.sgupta.composite.model.toAiAssistantDataModel
 import com.sgupta.core.flows.toResponseFlow
 import com.sgupta.core.network.Resource
+import com.sgupta.data.composite.BuildConfig
 import com.sgupta.domain.model.AIAssistantDataModel
 import com.sgupta.domain.repo.AIAssistantRepo
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +24,8 @@ class AIAssistantRepoImpl @Inject constructor(
         )
         return toResponseFlow(
             apiCall = {
-                aiAssistantApiService.generateContent("gemini-2.0-flash",BuildConfig.GEMINI_API_KEY, requestBody)
+                aiAssistantApiService.generateContent("gemini-2.0-flash",
+                    BuildConfig.GEMINI_API_KEY, requestBody)
             }, mapper = {
                 it?.toAiAssistantDataModel()
             }

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sgupta.network"
+    namespace = "com.sgupta.data.network"
     compileSdk = 35
 
     defaultConfig {

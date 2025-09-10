@@ -36,20 +36,16 @@ import com.sgupta.analytics.extensions.logError
 import com.sgupta.analytics.extensions.logNewsArticleClick
 import com.sgupta.analytics.manager.AnalyticsManager
 import com.sgupta.analytics.manager.MockAnalyticsManager
-import com.sgupta.composite.R
 import com.sgupta.composite.aiassistant.AIAssistantBottomSheet
-import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
 import com.sgupta.composite.home.components.ArticleListItem
 import com.sgupta.composite.home.components.CategoriesSectionItem
 import com.sgupta.composite.home.components.ChatFloatingActionBtn
 import com.sgupta.composite.home.components.CountriesSectionItem
 import com.sgupta.composite.home.components.NewsHeader
 import com.sgupta.composite.home.events.HomeScreenEvents
-import com.sgupta.composite.home.model.HomeNewsUiModel
-import com.sgupta.composite.home.states.HomeScreenViewState
-import com.sgupta.core.state.ViewEvent
 import com.sgupta.core.components.toolbar.common.LoadingIndicator
 import com.sgupta.core.components.toolbar.common.SectionHeadline
+import com.sgupta.feature.composite.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

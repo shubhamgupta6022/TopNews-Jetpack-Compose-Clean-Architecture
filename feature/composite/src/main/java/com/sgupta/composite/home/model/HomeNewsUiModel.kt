@@ -1,6 +1,6 @@
 package com.sgupta.composite.home.model
 
-import com.sgupta.composite.R
+import com.sgupta.feature.composite.R
 import com.sgupta.domain.model.ArticleDataModel
 
 data class HomeNewsUiModel(

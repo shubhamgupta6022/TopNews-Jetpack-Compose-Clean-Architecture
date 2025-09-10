@@ -38,7 +38,7 @@ import com.sgupta.analytics.constants.AnalyticsScreens
 import com.sgupta.analytics.extensions.TrackScreenView
 import com.sgupta.analytics.extensions.logButtonClick
 import com.sgupta.analytics.manager.AnalyticsManager
-import com.sgupta.composite.R
+import com.sgupta.feature.composite.R
 import com.sgupta.composite.aiassistant.components.ChatBubble
 import com.sgupta.composite.aiassistant.states.AIAssistantBottomSheetViewState
 import com.sgupta.core.theme.typography.Typography

@@ -6,4 +6,5 @@ plugins {
     id("com.google.dagger.hilt.android") version("2.53") apply false
     alias(libs.plugins.android.test) apply false
     id("com.google.gms.google-services") version "4.4.0" apply false
+    id("com.google.firebase.appdistribution") version "5.1.1" apply false
 }

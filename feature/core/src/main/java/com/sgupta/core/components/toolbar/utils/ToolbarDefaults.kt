@@ -1,7 +1,7 @@
 package com.sgupta.core.components.toolbar.utils
 
 import androidx.compose.runtime.Composable
-import com.sgupta.core.R
+import com.sgupta.feature.core.R
 import com.sgupta.core.components.toolbar.model.ToolbarAction
 
 object ToolbarDefaults {

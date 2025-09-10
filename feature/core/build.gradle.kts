@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sgupta.core"
+    namespace = "com.sgupta.feature.core"
     compileSdk = 35
 
     defaultConfig {
